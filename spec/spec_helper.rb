@@ -8,7 +8,6 @@ require 'yaml'
 spec_dir = File.dirname(__FILE__)
 Dir["#{spec_dir}/support/**/*.rb"].sort.each { |f| require f }
 
-FileUtils.makedirs('tmp')
 FileUtils.makedirs('log')
 
 Delayed::Worker.read_ahead = 1
@@ -19,7 +18,7 @@ Delayed::Worker.logger.level = Logger::DEBUG
 ActiveRecord::Base.logger = Delayed::Worker.logger
 ActiveRecord::Migration.verbose = false
 
-db_adapter = ENV.fetch('ADAPTER', 'sqlite')
+db_adapter = ENV.fetch('ADAPTER', 'sqlite3')
 config = YAML.load(File.read('spec/db/database.yml'))
 ActiveRecord::Base.establish_connection(config[db_adapter])
 require 'db/schema'
