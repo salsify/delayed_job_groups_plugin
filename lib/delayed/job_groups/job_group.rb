@@ -2,7 +2,7 @@ module Delayed
   module JobGroups
     class JobGroup < ActiveRecord::Base
 
-      self.table_name = 'delayed_job_groups'
+      self.table_name = "#{ActiveRecord::Base.table_name_prefix}delayed_job_groups"
 
       if Delayed::JobGroups::Compatibility.mass_assignment_security_enabled?
         attr_accessible :on_completion_job, :on_completion_job_options, :blocked, :on_cancellation_job,
