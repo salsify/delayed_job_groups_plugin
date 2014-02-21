@@ -9,7 +9,15 @@ group :test do
   gem 'delayed_job', '>= 3.0'
   gem 'delayed_job_active_record', '>= 0.4'
   gem 'rspec', '>= 2.14'
-  gem 'sqlite3'
+
+  platforms :ruby do
+    gem 'sqlite3'
+  end
+
+  platforms :jruby do
+    gem 'activerecord-jdbcsqlite3-adapter'
+    gem 'jdbc-sqlite3'
+  end
 end
 
 gemspec

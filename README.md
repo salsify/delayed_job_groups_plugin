@@ -92,11 +92,11 @@ job_group = Delayed::JobGroups::JobGroup.create!
 job_group.cancel
 ```
 
-## Limitations
+## Supported Platforms
 
-* This plugin currently only works with Delayed Job Active Record backend.
-* This plugin is currently only tested with Rails 3.2. It should work with Rails 4 but this has not been tested yet.
-* This plugin is currently only tested with MRI 1.9.3, 2.0.0, 2.1.0. It should work with JRuby and Rubinius but this has not been tested yet.
+* Only the Delayed Job Active Record backend is supported.
+* Tested with Rails 3.2 and 4.0.
+* Tested with MRI 1.9.3, 2.0.0, 2.1.0 and JRuby in 1.9 mode.
 
 ## Contributing
 
