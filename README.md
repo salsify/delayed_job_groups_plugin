@@ -1,4 +1,5 @@
 # DelayedJobGroups
+[![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups.png?branch=master)][travis]
 [![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups.png)](https://codeclimate.com/github/salsify/delayed_job_groups)
 
 A [Delayed Job](https://github.com/collectiveidea/delayed_job) plugin that adds job groups supporting:
@@ -94,7 +95,7 @@ job_group.cancel
 
 * This plugin currently only works with Delayed Job Active Record backend.
 * This plugin is currently only tested with Rails 3.2. It should work with Rails 4 but this has not been tested yet.
-* This plugin is currently only tested with MRI 2.0. It should work with MRI > 1.9.3 and JRuby but this has not been tested yet.
+* This plugin is currently only tested with MRI 1.9.3, 2.0.0, 2.1.0. It should work with JRuby and Rubinius but this has not been tested yet.
 
 ## Contributing
 
