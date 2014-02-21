@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 'database_cleaner'
 require 'delayed_job_groups'
 require 'yaml'

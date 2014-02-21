@@ -16,14 +16,4 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($/)
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
-
-  spec.add_development_dependency 'bundler', '>= 1.5'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec', '>= 2.14'
-  spec.add_development_dependency 'activerecord', '>= 3.2'
-  spec.add_development_dependency 'activesupport', '>= 3.2'
-  spec.add_development_dependency 'delayed_job', '>= 3.0'
-  spec.add_development_dependency 'delayed_job_active_record', '>= 0.4'
-  spec.add_development_dependency 'database_cleaner', '>= 1.2'
-  spec.add_development_dependency 'sqlite3', '>= 1.3'
 end
