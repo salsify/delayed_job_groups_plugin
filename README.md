@@ -42,7 +42,7 @@ Delayed::Worker.plugins << Delayed::JobGroups::Plugin
 
 ## Usage
 
-Creating a job group and queuing some jobs:
+Creating a job group and queueing some jobs:
 
 ```ruby
 job_group = Delayed::JobGroups::JobGroup.create!
