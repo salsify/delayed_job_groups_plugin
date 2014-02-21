@@ -16,12 +16,22 @@ module Delayed
 
       validates :queueing_complete, :blocked, inclusion: [true, false]
 
-      has_many :active_jobs, class_name: Job, conditions: {failed_at: nil}
+      if ActiveRecord::VERSION::MAJOR >= 4
+        has_many :active_jobs, -> { where(failed_at: nil) }, class_name: Job
+      else
+        has_many :active_jobs, class_name: Job, conditions: {failed_at: nil}
+      end
+
 
       # Only delete dependent jobs that are unlocked so we can determine if there are in-flight jobs
       # for canceled job groups
-      has_many :queued_jobs, class_name: Job, conditions: {failed_at: nil, locked_by: nil},
-               dependent: :delete_all
+      if ActiveRecord::VERSION::MAJOR >= 4
+        has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: Job,
+                 dependent: :delete_all
+      else
+        has_many :queued_jobs, class_name: Job, conditions: {failed_at: nil, locked_by: nil},
+                 dependent: :delete_all
+      end
 
       def mark_queueing_complete
         with_lock do
