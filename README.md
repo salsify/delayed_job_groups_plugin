@@ -10,11 +10,16 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
     $ gem install delayed_job_groups
+
+Run the required database migrations:
+
+    rails generate delayed_job_groups:install
+    rake db:migrate
 
 ## Usage
 
