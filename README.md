@@ -1,7 +1,7 @@
 # Delayed Job Groups
 [![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups.png?branch=master)][travis]
 [![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups.png)][codeclimate]
-[![Coverage Status](https://coveralls.io/repos/salsify/delayed_job_groups/badge.png?branch=master)][coveralls]
+[![Coverage Status](https://coveralls.io/repos/salsify/delayed_job_groups/badge.png)][coveralls]
 
 [travis]: http://travis-ci.org/salsify/delayed_job_groups
 [codeclimate]: https://codeclimate.com/github/salsify/delayed_job_groups
