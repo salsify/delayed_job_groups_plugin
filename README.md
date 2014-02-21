@@ -1,6 +1,6 @@
 # DelayedJobGroups
-[![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups.png?branch=master)][travis]
-[![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups.png)](https://codeclimate.com/github/salsify/delayed_job_groups)
+[![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups.png?branch=master)](travis)
+[![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups.png)](codeclimate)
 
 A [Delayed Job](https://github.com/collectiveidea/delayed_job) plugin that adds job groups supporting:
 
