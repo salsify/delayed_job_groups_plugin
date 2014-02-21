@@ -10,3 +10,4 @@ require 'delayed/job_groups/version'
 
 Delayed::Backend::ActiveRecord::Job.send(:include, Delayed::JobGroups::JobExtensions)
 
+Delayed::Worker.plugins << Delayed::JobGroups::Plugin

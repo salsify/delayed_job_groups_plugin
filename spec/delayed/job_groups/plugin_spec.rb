@@ -3,15 +3,12 @@ require 'spec_helper'
 describe Delayed::JobGroups::Plugin do
 
   before(:all) do
-    Delayed::Worker.plugins << Delayed::JobGroups::Plugin
-
     @old_max_attempts = Delayed::Worker.max_attempts
     Delayed::Worker.max_attempts = 2
   end
 
   after(:all) do
     Delayed::Worker.max_attempts = @old_max_attempts
-    Delayed::Worker.plugins.delete(Delayed::JobGroups::Plugin)
   end
 
   before(:each) do

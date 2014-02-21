@@ -33,13 +33,6 @@ Run the required database migrations:
     $ rails generate delayed_job_groups:install
     $ rake db:migrate
 
-Update your Delayed Job initializer to register the plugin:
-
-```ruby
-require 'delayed_job_groups'
-Delayed::Worker.plugins << Delayed::JobGroups::Plugin
-```
-
 ## Usage
 
 Creating a job group and queueing some jobs:
