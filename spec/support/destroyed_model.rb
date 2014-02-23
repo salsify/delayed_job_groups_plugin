@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 RSpec::Matchers.define :have_been_destroyed do
   match do |actual|
     !actual.class.where(id: actual.id).exists?

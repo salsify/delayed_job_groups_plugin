@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'active_support'
 require 'active_record'
 require 'delayed_job'

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 ActiveRecord::Schema.define(:version => 0) do
 
   create_table(:delayed_jobs, force: true) do |t|

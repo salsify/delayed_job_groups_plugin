@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'delayed_job'
 require 'set'
 

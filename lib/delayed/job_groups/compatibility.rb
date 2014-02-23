@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'active_support/version'
 require 'active_record/version'
 

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Delayed
   module JobGroups
     class JobGroup < ActiveRecord::Base
