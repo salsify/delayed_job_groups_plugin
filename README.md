@@ -1,8 +1,10 @@
 # Delayed Job Groups
+[![Gem Version](https://badge.fury.io/rb/delayed_job_groups_plugin.png)][gem]
 [![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups_plugin.png?branch=master)][travis]
 [![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups_plugin.png)][codeclimate]
 [![Coverage Status](https://coveralls.io/repos/salsify/delayed_job_groups_plugin/badge.png)][coveralls]
 
+[gem]: https://rubygems.org/gems/delayed_job_groups_plugin
 [travis]: http://travis-ci.org/salsify/delayed_job_groups_plugin
 [codeclimate]: https://codeclimate.com/github/salsify/delayed_job_groups_plugin
 [coveralls]: https://coveralls.io/r/salsify/delayed_job_groups_plugin
