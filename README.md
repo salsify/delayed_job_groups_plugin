@@ -1,11 +1,11 @@
 # Delayed Job Groups
-[![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups.png?branch=master)][travis]
-[![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups.png)][codeclimate]
-[![Coverage Status](https://coveralls.io/repos/salsify/delayed_job_groups/badge.png)][coveralls]
+[![Build Status](https://secure.travis-ci.org/salsify/delayed_job_groups_plugin.png?branch=master)][travis]
+[![Code Climate](https://codeclimate.com/github/salsify/delayed_job_groups_plugin.png)][codeclimate]
+[![Coverage Status](https://coveralls.io/repos/salsify/delayed_job_groups_plugin/badge.png)][coveralls]
 
-[travis]: http://travis-ci.org/salsify/delayed_job_groups
-[codeclimate]: https://codeclimate.com/github/salsify/delayed_job_groups
-[coveralls]: https://coveralls.io/r/salsify/delayed_job_groups
+[travis]: http://travis-ci.org/salsify/delayed_job_groups_plugin
+[codeclimate]: https://codeclimate.com/github/salsify/delayed_job_groups_plugin
+[coveralls]: https://coveralls.io/r/salsify/delayed_job_groups_plugin
 
 A [Delayed Job](https://github.com/collectiveidea/delayed_job) plugin that adds job groups supporting:
 
@@ -18,7 +18,7 @@ A [Delayed Job](https://github.com/collectiveidea/delayed_job) plugin that adds 
 
 Add this line to your application's Gemfile:
 
-    gem 'delayed_job_groups'
+    gem 'delayed_job_groups_plugin'
 
 And then execute:
 
@@ -26,11 +26,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install delayed_job_groups
+    $ gem install delayed_job_groups_plugin
 
 Run the required database migrations:
 
-    $ rails generate delayed_job_groups:install
+    $ rails generate delayed_job_groups_plugin:install
     $ rake db:migrate
 
 ## Usage

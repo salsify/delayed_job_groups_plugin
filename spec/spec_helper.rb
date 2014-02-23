@@ -10,7 +10,7 @@ SimpleCov.start do
 end
 
 require 'database_cleaner'
-require 'delayed_job_groups'
+require 'delayed_job_groups_plugin'
 require 'yaml'
 
 spec_dir = File.dirname(__FILE__)
