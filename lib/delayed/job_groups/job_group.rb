@@ -54,7 +54,7 @@ module Delayed
 
         with_lock do
           update_column(:blocked, false)
-          active_jobs.update_all(blocked: false)
+          active_jobs.update_all(blocked: false, run_at: Delayed::Job.db_time_now)
           complete if ready_for_completion?
         end
       end

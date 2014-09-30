@@ -18,8 +18,12 @@ describe Delayed::JobGroups::JobGroup do
   end
 
   before do
-    Time.stub(:now).and_return(current_time)
+    Timecop.freeze(current_time)
     Delayed::Job.stub(:enqueue)
+  end
+
+  after do
+    Timecop.return
   end
 
   shared_examples "the job group was completed" do
@@ -173,16 +177,17 @@ describe Delayed::JobGroups::JobGroup do
 
       context "when there are pending jobs" do
         let!(:job) { Delayed::Job.create!(job_group_id: job_group.id, blocked: true) }
+        let(:unblock_time) { Time.utc(2014) }
 
         before do
           job_group.mark_queueing_complete
-          job_group.unblock
+          Timecop.freeze(unblock_time) { job_group.unblock }
         end
 
         its(:blocked?) { should be_false }
 
-        it "sets the job's run_at to the current time" do
-          job.reload.run_at.should eq current_time
+        it "sets the job's run_at to the unblocked time" do
+          job.reload.run_at.should eq unblock_time
         end
 
         it_behaves_like "the job group was not completed"

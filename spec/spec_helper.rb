@@ -14,6 +14,7 @@ end
 require 'database_cleaner'
 require 'delayed_job_groups_plugin'
 require 'yaml'
+require 'timecop'
 
 spec_dir = File.dirname(__FILE__)
 Dir["#{spec_dir}/support/**/*.rb"].sort.each { |f| require f }
