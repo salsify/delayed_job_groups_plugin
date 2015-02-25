@@ -35,7 +35,7 @@ module Delayed
           # Need to check that the job group is present since another
           # job may have concurrently cancelled it.
           if job.in_job_group? && job.job_group
-            job.job_group.cancel
+            job.job_group.cancel if job.job_group.failure_cancels_group?
           end
         end
 

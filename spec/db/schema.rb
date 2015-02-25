@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.text :on_completion_job_options
     t.text :on_cancellation_job
     t.text :on_cancellation_job_options
+    t.boolean :failure_cancels_group, default: true, null: false
     t.boolean :queueing_complete, default: false, null: false
     t.boolean :blocked, default: false, null: false
   end

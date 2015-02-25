@@ -74,21 +74,48 @@ describe Delayed::JobGroups::Plugin do
     queued_job_count.should eq 0
   end
 
-  it "cancels the job group if a job fails" do
-    Delayed::Worker.max_attempts = 1
+  describe "job failures" do
 
-    job_group.enqueue(FailingJob.new)
-    job_group.enqueue(NoOpJob.new)
-    job_group.mark_queueing_complete
-    queued_job_count.should eq 2
-    job_group_count.should eq 1
+    context "with failure_cancels_group enabled" do
+      it "cancel the group" do
+        Delayed::Worker.max_attempts = 1
 
-    # Run the job which should fail and cancel the JobGroup
-    Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
-    failed_job_count.should eq 1
-    queued_job_count.should eq 0
-    job_group_count.should eq 0
+        job_group.enqueue(FailingJob.new)
+        job_group.enqueue(NoOpJob.new)
+        job_group.mark_queueing_complete
+        queued_job_count.should eq 2
+        job_group_count.should eq 1
+
+        # Run the job which should fail and cancel the JobGroup
+        Delayed::Worker.new.work_off(1)
+        CompletionJob.invoked.should be_false
+        failed_job_count.should eq 1
+        queued_job_count.should eq 0
+        job_group_count.should eq 0
+      end
+    end
+
+    context "with failure_cancels_group disabled" do
+
+      before { job_group.update_attribute(:failure_cancels_group, false) }
+
+      it "do not cancel the group" do
+        Delayed::Worker.max_attempts = 1
+
+        job_group.enqueue(FailingJob.new)
+        job_group.enqueue(NoOpJob.new)
+        job_group.mark_queueing_complete
+        queued_job_count.should eq 2
+        job_group_count.should eq 1
+
+        # Run the job which should fail don't cancel the JobGroup
+        Delayed::Worker.new.work_off(1)
+        CancellationJob.invoked.should be_false
+        failed_job_count.should eq 1
+        queued_job_count.should eq 1
+        job_group_count.should eq 1
+      end
+    end
   end
 
   it "doesn't retry failed jobs if the job group has been canceled" do

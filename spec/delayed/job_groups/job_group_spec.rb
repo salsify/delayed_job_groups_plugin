@@ -225,4 +225,26 @@ describe Delayed::JobGroups::JobGroup do
       running_job.should_not have_been_destroyed
     end
   end
+
+  describe "#failure_cancels_group?" do
+    let(:failure_cancels_group) { true }
+
+    before do
+      job_group.update_attribute(:failure_cancels_group, failure_cancels_group)
+    end
+
+    context "when failures should cancel the group" do
+      it "is true" do
+        expect(job_group.failure_cancels_group?).to be true
+      end
+    end
+
+    context "when failures should not cancel the group" do
+      let(:failure_cancels_group) { false }
+
+      it "is false" do
+        expect(job_group.failure_cancels_group?).to be false
+      end
+    end
+  end
 end

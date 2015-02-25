@@ -8,7 +8,7 @@ module Delayed
 
       if Delayed::JobGroups::Compatibility.mass_assignment_security_enabled?
         attr_accessible :on_completion_job, :on_completion_job_options, :blocked, :on_cancellation_job,
-                        :on_cancellation_job_options
+                        :on_cancellation_job_options, :failure_cancels_group
       end
 
       serialize :on_completion_job
@@ -16,7 +16,7 @@ module Delayed
       serialize :on_cancellation_job
       serialize :on_cancellation_job_options, Hash
 
-      validates :queueing_complete, :blocked, inclusion: [true, false]
+      validates :queueing_complete, :blocked, :failure_cancels_group, inclusion: [true, false]
 
       if ActiveRecord::VERSION::MAJOR >= 4
         has_many :active_jobs, -> { where(failed_at: nil) }, class_name: Job
