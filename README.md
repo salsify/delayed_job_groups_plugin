@@ -39,7 +39,7 @@ Run the required database migrations:
 run the following generator to create a migration for the new configuration column.
 
     $ rails generate migration add_failure_cancels_group_to_delayed_job_groups failure_cancels_group:boolean
-    $ add `default: true, null: false` to the generated migration for the failure_cancels_group column
+    # add `default: true, null: false` to the generated migration for the failure_cancels_group column
     $ rake db:migrate
 
 ## Usage
