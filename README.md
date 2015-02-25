@@ -35,6 +35,13 @@ Run the required database migrations:
     $ rails generate delayed_job_groups_plugin:install
     $ rake db:migrate
 
+## Upgrading from 0.1.2
+run the following generator to create a migration for the new configuration column.
+
+    $ rails generate migration add_failure_cancels_group_to_delayed_job_groups failure_cancels_group:boolean
+    $ add `default: true, null: false` to the generated migration for the failure_cancels_group column
+    $ rake db:migrate
+
 ## Usage
 
 Creating a job group and queueing some jobs:
@@ -89,6 +96,12 @@ job_group = Delayed::JobGroups::JobGroup.create!
 # Do more stuff...
  
 job_group.cancel
+```
+
+Configuration to allow failed jobs not to cancel the group
+```ruby
+# We can optionally pass options that will allow jobs to fail without cancelling the group
+job_group = Delayed::JobGroups::JobGroup.create!(failure_cancels_group: false)
 ```
 
 ## Supported Platforms

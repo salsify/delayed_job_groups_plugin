@@ -230,11 +230,11 @@ describe Delayed::JobGroups::JobGroup do
     let(:failure_cancels_group) { true }
 
     before do
-      job_group.update_attribute(:failure_cancels_group, failure_cancels_group)
+      job_group.update_attributes!(failure_cancels_group: failure_cancels_group)
     end
 
     context "when failures should cancel the group" do
-      it "is true" do
+      it "returns true" do
         expect(job_group.failure_cancels_group?).to be true
       end
     end
@@ -242,7 +242,7 @@ describe Delayed::JobGroups::JobGroup do
     context "when failures should not cancel the group" do
       let(:failure_cancels_group) { false }
 
-      it "is false" do
+      it "returns false" do
         expect(job_group.failure_cancels_group?).to be false
       end
     end

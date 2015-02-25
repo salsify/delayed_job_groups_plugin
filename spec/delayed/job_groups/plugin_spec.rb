@@ -77,7 +77,7 @@ describe Delayed::JobGroups::Plugin do
   describe "job failures" do
 
     context "with failure_cancels_group enabled" do
-      it "cancel the group" do
+      it "cancels the group" do
         Delayed::Worker.max_attempts = 1
 
         job_group.enqueue(FailingJob.new)
@@ -97,9 +97,9 @@ describe Delayed::JobGroups::Plugin do
 
     context "with failure_cancels_group disabled" do
 
-      before { job_group.update_attribute(:failure_cancels_group, false) }
+      before { job_group.update_attributes!(failure_cancels_group: false) }
 
-      it "do not cancel the group" do
+      it "does not cancel the group" do
         Delayed::Worker.max_attempts = 1
 
         job_group.enqueue(FailingJob.new)
