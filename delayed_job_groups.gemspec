@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
 
-  spec.add_development_dependency 'activerecord', ENV.fetch('RAILS_VERSION', ['>= 3.2', '< 4.1'])
+  spec.add_development_dependency 'activerecord', ENV.fetch('RAILS_VERSION', ['>= 3.2', '< 5.0'])
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
   spec.add_development_dependency 'rake'
