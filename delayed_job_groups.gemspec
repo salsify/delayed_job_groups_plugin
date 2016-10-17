@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'delayed_job', '>= 3.0'
+  spec.add_dependency 'delayed_job', '>= 4.1'
   spec.add_dependency 'delayed_job_active_record', '>= 0.4'
 
   spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
