@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '>= 2.14', '< 2.99'
   spec.add_development_dependency 'simplecov', '~> 0.7.1'
   spec.add_development_dependency 'timecop'
+  spec.add_development_dependency 'mime-types', '~> 2'
 
   if RUBY_PLATFORM == 'java'
     spec.add_development_dependency 'jdbc-sqlite3'
