@@ -7,19 +7,6 @@ module Delayed
   module JobGroups
     class Plugin < Delayed::Plugin
 
-      # Delayed job callbacks will be registered in a global Delayed::Lifecycle every time a
-      # Delayed::Worker is created. This creates problems in test runs that create
-      # multiple workers because we register the callbacks multiple times on the same
-      # global Lifecycle.
-      def self.callbacks(&block)
-        registered_lifecycles = Set.new
-        super do |lifecycle|
-          if registered_lifecycles.add?(lifecycle.object_id)
-            block.call(lifecycle)
-          end
-        end
-      end
-
       callbacks do |lifecycle|
         lifecycle.before(:error) do |worker, job|
           # If the job group has been cancelled then don't let the job be retried
