@@ -1,6 +1,8 @@
 # Changelog
 
-### 0.1.4(Unreleased)
+### 0.2.0
+* Change supported delayed job version
+* Clean up lifecycle management in plugin
 
 ### 0.1.3
 * Change supported rails version.
