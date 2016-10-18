@@ -18,3 +18,5 @@ matrix:
     # See https://github.com/rails/rails/pull/18306
     - rvm: 2.2.0
       env: RAILS_VERSION="~> 3.2.21" JRUBY_OPTS="$JRUBY_OPTS --debug"
+before_install:
+  - gem install bundler
