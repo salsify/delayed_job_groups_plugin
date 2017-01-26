@@ -35,5 +35,7 @@ matrix:
       rvm: 2.0.0-p648
     - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
       rvm: 1.9.3
+    - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
+      rvm: jruby-19mode
 before_install:
   - gem install bundler
