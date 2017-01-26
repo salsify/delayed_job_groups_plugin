@@ -1,14 +1,17 @@
 language: ruby
 env:
-  - RAILS_VERSION="~> 3.2.21" JRUBY_OPTS="$JRUBY_OPTS --debug"
+  - RAILS_VERSION="~> 3.2.22" JRUBY_OPTS="$JRUBY_OPTS --debug"
   - RAILS_VERSION="~> 4.0.13" JRUBY_OPTS="$JRUBY_OPTS --debug"
-  - RAILS_VERSION="~> 4.1.9" JRUBY_OPTS="$JRUBY_OPTS --debug"
-  - RAILS_VERSION="~> 4.2.0" JRUBY_OPTS="$JRUBY_OPTS --debug"
+  - RAILS_VERSION="~> 4.1.16" JRUBY_OPTS="$JRUBY_OPTS --debug"
+  - RAILS_VERSION="~> 4.2.7" JRUBY_OPTS="$JRUBY_OPTS --debug"
+  - RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
 rvm:
+  - 2.4.0
+  - 2.3.3
+  - 2.2.6
+  - 2.1.10
+  - 2.0.0-p648
   - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - 2.2.0
   - jruby-19mode
 matrix:
   exclude:
@@ -18,5 +21,21 @@ matrix:
     # See https://github.com/rails/rails/pull/18306
     - rvm: 2.2.0
       env: RAILS_VERSION="~> 3.2.21" JRUBY_OPTS="$JRUBY_OPTS --debug"
+    # ruby 2.4 requires rails 4.2 or later
+    - rvm: 2.4.0
+      env: RAILS_VERSION="~> 3.2.22" JRUBY_OPTS="$JRUBY_OPTS --debug"
+    - rvm: 2.4.0
+      env: RAILS_VERSION="~> 4.0.13" JRUBY_OPTS="$JRUBY_OPTS --debug"
+    - rvm: 2.4.0
+      env: RAILS_VERSION="~> 4.1.16" JRUBY_OPTS="$JRUBY_OPTS --debug"
+    # rails 5 requires ruby 2.2 or later
+    - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
+      rvm: 2.1.10
+    - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
+      rvm: 2.0.0-p648
+    - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
+      rvm: 1.9.3
+    - env: RAILS_VERSION="~> 5.0.1" JRUBY_OPTS="$JRUBY_OPTS --debug"
+      rvm: jruby-19mode
 before_install:
   - gem install bundler
