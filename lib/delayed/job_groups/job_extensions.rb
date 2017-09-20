@@ -4,6 +4,11 @@ module Delayed
   module JobGroups
     module JobExtensions
       extend ActiveSupport::Concern
+      module ReadyToRunExtension
+        def ready_to_run(worker_name, max_run_time)
+          super(worker_name, max_run_time).where(blocked: false)
+        end
+      end
 
       included do
         if Delayed::JobGroups::Compatibility.mass_assignment_security_enabled?
@@ -13,15 +18,9 @@ module Delayed
         belongs_to :job_group, class_name: 'Delayed::JobGroups::JobGroup'
 
         class << self
-
-          # Patch ready_to_run to exclude blocked jobs
-          def ready_to_run_with_blocked_filtering(worker_name, max_run_time)
-            ready_to_run_without_blocked_filtering(worker_name, max_run_time).where(blocked: false)
-          end
-          alias_method_chain :ready_to_run, :blocked_filtering
+          prepend ReadyToRunExtension
         end
       end
-
       def in_job_group?
         job_group_id.present?
       end
