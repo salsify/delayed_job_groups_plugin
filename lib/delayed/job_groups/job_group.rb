@@ -19,7 +19,7 @@ module Delayed
       validates :queueing_complete, :blocked, :failure_cancels_group, inclusion: [true, false]
 
       if ActiveRecord::VERSION::MAJOR >= 4
-        has_many :active_jobs, -> { where(failed_at: nil) }, class_name: 'Job'
+        has_many :active_jobs, -> { where(failed_at: nil) }, class_name: '::Delayed::Job'
       else
         has_many :active_jobs, class_name: Job, conditions: {failed_at: nil}
       end
