@@ -17,6 +17,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
+  spec.required_ruby_version = '>= 2.1'
+
   spec.add_dependency 'delayed_job', '>= 4.1'
   spec.add_dependency 'delayed_job_active_record', '>= 0.4'
 
