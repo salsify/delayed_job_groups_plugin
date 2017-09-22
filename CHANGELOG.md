@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.3.0 (unreleased)
+* Drop support for Ruby 1.9 and 2.0.
+
 ### 0.2.0
 * Change supported delayed job version
 * Clean up lifecycle management in plugin
