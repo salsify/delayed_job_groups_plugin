@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
 
-  spec.add_development_dependency 'activerecord', ENV.fetch('RAILS_VERSION', ['>= 3.2', '< 5.1'])
+  spec.add_development_dependency 'activerecord', ENV.fetch('RAILS_VERSION', ['>= 3.2', '< 5.2'])
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
   # rspec < 3.5 requires rake < 11.0
