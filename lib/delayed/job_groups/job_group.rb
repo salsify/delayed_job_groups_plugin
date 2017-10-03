@@ -28,7 +28,7 @@ module Delayed
       # Only delete dependent jobs that are unlocked so we can determine if there are in-flight jobs
       # for canceled job groups
       if ActiveRecord::VERSION::MAJOR >= 4
-        has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: Job,
+        has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
                  dependent: :delete_all
       else
         has_many :queued_jobs, class_name: Job, conditions: {failed_at: nil, locked_by: nil},
