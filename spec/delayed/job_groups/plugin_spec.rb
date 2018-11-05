@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -13,7 +13,7 @@ describe Delayed::JobGroups::Plugin do
     Delayed::Worker.max_attempts = @old_max_attempts
   end
 
-  before(:each) do
+  before do
     CompletionJob.invoked = false
     CancellationJob.invoked = false
   end
@@ -201,7 +201,7 @@ describe Delayed::JobGroups::Plugin do
       job_group.mark_queueing_complete
       job_group.cancel
 
-      #cancellation job should be queued
+      # cancellation job should be queued
       queued_job_count.should eq 1
       CancellationJob.invoked.should be(false)
 

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 RSpec::Matchers.define :have_been_destroyed do
   match do |actual|
@@ -6,7 +6,7 @@ RSpec::Matchers.define :have_been_destroyed do
   end
 
   description do
-    "model should have been destroyed"
+    'model should have been destroyed'
   end
 
   failure_message_for_should do |actual|

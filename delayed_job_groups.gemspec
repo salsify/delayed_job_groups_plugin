@@ -1,4 +1,6 @@
-# encoding: UTF-8
+
+# frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'delayed/job_groups/version'
@@ -8,12 +10,12 @@ Gem::Specification.new do |spec|
   spec.version       = Delayed::JobGroups::VERSION
   spec.authors       = ['Joel Turkel', 'Randy Burkes']
   spec.email         = ['jturkel@salsify.com', 'rlburkes@gmail.com']
-  spec.description   = %q{Aggregates Delayed::Job jobs into groups with group level management and lifecycle callbacks}
-  spec.summary       = %q{Delayed::Job job groups plugin}
+  spec.description   = 'Aggregates Delayed::Job jobs into groups with group level management and lifecycle callbacks'
+  spec.summary       = 'Delayed::Job job groups plugin'
   spec.homepage      = 'https://github.com/salsify/delayed_job_groups_plugin'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
@@ -28,12 +30,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activerecord', '>= 4.2', '< 5.3'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
+  spec.add_development_dependency 'mime-types'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'rspec-its'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'timecop'
-  spec.add_development_dependency 'mime-types'
-  spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'salsify_rubocop', '0.52.1.1'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'sqlite3'
+  spec.add_development_dependency 'timecop'
 end

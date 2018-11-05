@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -51,15 +51,16 @@ describe Delayed::JobGroups::JobGroup do
     context "when no jobs exist" do
       before { job_group.mark_queueing_complete }
 
-      it { should be_queueing_complete }
+      it { is_expected.to be_queueing_complete }
       it_behaves_like "the job group was completed"
     end
 
     context "when no jobs exist but the job group is blocked" do
       let(:blocked) { true }
+
       before { job_group.mark_queueing_complete }
 
-      it { should be_queueing_complete }
+      it { is_expected.to be_queueing_complete }
       it_behaves_like "the job group was not completed"
     end
 
@@ -69,7 +70,7 @@ describe Delayed::JobGroups::JobGroup do
         job_group.mark_queueing_complete
       end
 
-      it { should be_queueing_complete }
+      it { is_expected.to be_queueing_complete }
       it_behaves_like "the job group was not completed"
     end
   end
@@ -169,7 +170,7 @@ describe Delayed::JobGroups::JobGroup do
         job_group.unblock
       end
 
-      its(:blocked?) { should be(false) }
+      its(:blocked?) { is_expected.to be(false) }
     end
 
     context "when the JobGroup is blocked" do
@@ -184,7 +185,7 @@ describe Delayed::JobGroups::JobGroup do
           Timecop.freeze(unblock_time) { job_group.unblock }
         end
 
-        its(:blocked?) { should be(false) }
+        its(:blocked?) { is_expected.to be(false) }
 
         it "sets the job's run_at to the unblocked time" do
           job.reload.run_at.should eq unblock_time
@@ -199,7 +200,7 @@ describe Delayed::JobGroups::JobGroup do
           job_group.unblock
         end
 
-        its(:blocked?) { should be(false) }
+        its(:blocked?) { is_expected.to be(false) }
         it_behaves_like "the job group was completed"
       end
     end

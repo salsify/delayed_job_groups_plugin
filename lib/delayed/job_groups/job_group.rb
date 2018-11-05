@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Delayed
   module JobGroups
@@ -21,7 +21,7 @@ module Delayed
       if ActiveRecord::VERSION::MAJOR >= 4
         has_many :active_jobs, -> { where(failed_at: nil) }, class_name: '::Delayed::Job'
       else
-        has_many :active_jobs, class_name: Job, conditions: {failed_at: nil}
+        has_many :active_jobs, class_name: Job, conditions: { failed_at: nil }
       end
 
 
@@ -31,7 +31,7 @@ module Delayed
         has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
                  dependent: :delete_all
       else
-        has_many :queued_jobs, class_name: Job, conditions: {failed_at: nil, locked_by: nil},
+        has_many :queued_jobs, class_name: Job, conditions: { failed_at: nil, locked_by: nil },
                  dependent: :delete_all
       end
 
