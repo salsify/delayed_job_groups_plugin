@@ -169,7 +169,7 @@ describe Delayed::JobGroups::JobGroup do
         job_group.unblock
       end
 
-      its(:blocked?) { should be_false }
+      its(:blocked?) { should be(false) }
     end
 
     context "when the JobGroup is blocked" do
@@ -184,7 +184,7 @@ describe Delayed::JobGroups::JobGroup do
           Timecop.freeze(unblock_time) { job_group.unblock }
         end
 
-        its(:blocked?) { should be_false }
+        its(:blocked?) { should be(false) }
 
         it "sets the job's run_at to the unblocked time" do
           job.reload.run_at.should eq unblock_time
@@ -199,7 +199,7 @@ describe Delayed::JobGroups::JobGroup do
           job_group.unblock
         end
 
-        its(:blocked?) { should be_false }
+        its(:blocked?) { should be(false) }
         it_behaves_like "the job group was completed"
       end
     end

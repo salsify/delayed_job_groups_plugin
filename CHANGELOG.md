@@ -1,6 +1,12 @@
 # Changelog
 
-### 0.3.0 (unreleased)
+### 0.4.0
+* Drop support for Ruby 2.0, 2.1 and 2.2.
+* Add support for Ruby 2.5.
+* Drop support for Rails < 4.2.
+* Add support for Rails 5.2
+
+### 0.3.0
 * Drop support for Ruby 1.9 and 2.0.
 
 ### 0.2.0

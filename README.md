@@ -107,8 +107,8 @@ job_group = Delayed::JobGroups::JobGroup.create!(failure_cancels_group: false)
 ## Supported Platforms
 
 * Only the Delayed Job Active Record backend is supported.
-* Tested with Rails 3.2 and 4.0.
-* Tested with MRI 1.9.3, 2.0.0, 2.1.0 and JRuby in 1.9 mode.
+* Tested with Rails 4.2 through 5.2.
+* Tested with MRI 2.3 through 2.5.
 
 ## Contributing
 
