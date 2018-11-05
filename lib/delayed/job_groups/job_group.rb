@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Delayed
   module JobGroups
@@ -18,22 +18,12 @@ module Delayed
 
       validates :queueing_complete, :blocked, :failure_cancels_group, inclusion: [true, false]
 
-      if ActiveRecord::VERSION::MAJOR >= 4
-        has_many :active_jobs, -> { where(failed_at: nil) }, class_name: '::Delayed::Job'
-      else
-        has_many :active_jobs, class_name: Job, conditions: {failed_at: nil}
-      end
-
+      has_many :active_jobs, -> { where(failed_at: nil) }, class_name: '::Delayed::Job'
 
       # Only delete dependent jobs that are unlocked so we can determine if there are in-flight jobs
       # for canceled job groups
-      if ActiveRecord::VERSION::MAJOR >= 4
-        has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
-                 dependent: :delete_all
-      else
-        has_many :queued_jobs, class_name: Job, conditions: {failed_at: nil, locked_by: nil},
-                 dependent: :delete_all
-      end
+      has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
+                dependent: :delete_all
 
       def mark_queueing_complete
         with_lock do
@@ -78,7 +68,7 @@ module Delayed
         end
       end
 
-      def self.has_pending_jobs?(job_group_ids)
+      def self.has_pending_jobs?(job_group_ids) # rubocop:disable Naming/PredicateName
         job_group_ids = Array(job_group_ids)
         return false if job_group_ids.empty?
         Delayed::Job.where(job_group_id: job_group_ids, failed_at: nil).exists?

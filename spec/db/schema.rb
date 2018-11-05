@@ -1,6 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(version: 0) do
 
   create_table(:delayed_jobs, force: true) do |t|
     t.integer :priority, default: 0
