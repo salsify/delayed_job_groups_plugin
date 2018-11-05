@@ -19,54 +19,54 @@ describe Delayed::JobGroups::Plugin do
     job_group.enqueue(NoOpJob.new)
     job_group.enqueue(NoOpJob.new)
     job_group.mark_queueing_complete
-    job_group_count.should eq 1
-    queued_job_count.should eq 2
+    expect(job_group_count).to eq 1
+    expect(queued_job_count).to eq 2
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 1
-    queued_job_count.should eq 1
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 1
+    expect(queued_job_count).to eq 1
 
     # Run our second job which should enqueue the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 0
-    queued_job_count.should eq 1
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 0
+    expect(queued_job_count).to eq 1
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(true)
-    queued_job_count.should eq 0
+    expect(CompletionJob.invoked).to be(true)
+    expect(queued_job_count).to eq 0
   end
 
   it "only runs the completion job after queueing is completed" do
     job_group.enqueue(NoOpJob.new)
     job_group.enqueue(NoOpJob.new)
-    job_group_count.should eq 1
-    queued_job_count.should eq 2
+    expect(job_group_count).to eq 1
+    expect(queued_job_count).to eq 2
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 1
-    queued_job_count.should eq 1
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 1
+    expect(queued_job_count).to eq 1
 
     # Run our second job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 1
-    queued_job_count.should eq 0
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 1
+    expect(queued_job_count).to eq 0
 
     # Mark queueing complete which should queue the completion job
     job_group.mark_queueing_complete
-    job_group_count.should eq 0
-    queued_job_count.should eq 1
+    expect(job_group_count).to eq 0
+    expect(queued_job_count).to eq 1
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(true)
-    queued_job_count.should eq 0
+    expect(CompletionJob.invoked).to be(true)
+    expect(queued_job_count).to eq 0
   end
 
   describe "job failures" do
@@ -78,15 +78,15 @@ describe Delayed::JobGroups::Plugin do
         job_group.enqueue(FailingJob.new)
         job_group.enqueue(NoOpJob.new)
         job_group.mark_queueing_complete
-        queued_job_count.should eq 2
-        job_group_count.should eq 1
+        expect(queued_job_count).to eq 2
+        expect(job_group_count).to eq 1
 
         # Run the job which should fail and cancel the JobGroup
         Delayed::Worker.new.work_off(1)
-        CompletionJob.invoked.should be(false)
-        failed_job_count.should eq 1
-        queued_job_count.should eq 0
-        job_group_count.should eq 0
+        expect(CompletionJob.invoked).to be(false)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 0
+        expect(job_group_count).to eq 0
       end
     end
 
@@ -100,15 +100,15 @@ describe Delayed::JobGroups::Plugin do
         job_group.enqueue(FailingJob.new)
         job_group.enqueue(NoOpJob.new)
         job_group.mark_queueing_complete
-        queued_job_count.should eq 2
-        job_group_count.should eq 1
+        expect(queued_job_count).to eq 2
+        expect(job_group_count).to eq 1
 
         # Run the job which should fail don't cancel the JobGroup
         Delayed::Worker.new.work_off(1)
-        CancellationJob.invoked.should be(false)
-        failed_job_count.should eq 1
-        queued_job_count.should eq 1
-        job_group_count.should eq 1
+        expect(CancellationJob.invoked).to be(false)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 1
+        expect(job_group_count).to eq 1
       end
     end
   end
@@ -116,12 +116,12 @@ describe Delayed::JobGroups::Plugin do
   it "doesn't retry failed jobs if the job group has been canceled" do
     job_group.cancel
     Delayed::Job.enqueue(FailingJob.new, job_group_id: job_group.id)
-    queued_job_count.should eq 1
+    expect(queued_job_count).to eq 1
 
     # Run the job which should fail and should not queue a retry
     Delayed::Worker.new.work_off(1)
-    failed_job_count.should eq 1
-    queued_job_count.should eq 0
+    expect(failed_job_count).to eq 1
+    expect(queued_job_count).to eq 0
   end
 
   it "doesn't run jobs until they're unblocked" do
@@ -131,32 +131,32 @@ describe Delayed::JobGroups::Plugin do
     job_group.enqueue(NoOpJob.new)
     job_group.enqueue(NoOpJob.new)
     job_group.mark_queueing_complete
-    Delayed::Job.count.should eq 2
+    expect(Delayed::Job.count).to eq 2
 
     # No jobs should run because they're blocked
     (successes, failures) = Delayed::Worker.new.work_off
-    successes.should eq 0
-    failures.should eq 0
-    Delayed::Job.count.should eq 2
+    expect(successes).to eq 0
+    expect(failures).to eq 0
+    expect(Delayed::Job.count).to eq 2
 
     job_group.unblock
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 1
-    Delayed::Job.count.should eq 1
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 1
+    expect(Delayed::Job.count).to eq 1
 
     # Run our second job which should enqueue the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(false)
-    job_group_count.should eq 0
-    Delayed::Job.count.should eq 1
+    expect(CompletionJob.invoked).to be(false)
+    expect(job_group_count).to eq 0
+    expect(Delayed::Job.count).to eq 1
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be(true)
-    Delayed::Job.count.should eq 0
+    expect(CompletionJob.invoked).to be(true)
+    expect(Delayed::Job.count).to eq 0
   end
 
   context "when a cancellation job is provided" do
@@ -171,23 +171,23 @@ describe Delayed::JobGroups::Plugin do
       job_group.enqueue(FailingJob.new)
       job_group.enqueue(NoOpJob.new)
       job_group.mark_queueing_complete
-      queued_job_count.should eq 2
-      job_group_count.should eq 1
+      expect(queued_job_count).to eq 2
+      expect(job_group_count).to eq 1
 
       # Run the job which should fail and cancel the JobGroup
       Delayed::Worker.new.work_off(1)
-      CompletionJob.invoked.should be(false)
-      CancellationJob.invoked.should be(false)
-      failed_job_count.should eq 1
+      expect(CompletionJob.invoked).to be(false)
+      expect(CancellationJob.invoked).to be(false)
+      expect(failed_job_count).to eq 1
 
-      queued_job_count.should eq 1
-      job_group_count.should eq 0
+      expect(queued_job_count).to eq 1
+      expect(job_group_count).to eq 0
 
       # Now we should run the cancellation job
       Delayed::Worker.new.work_off(1)
-      CompletionJob.invoked.should be(false)
-      CancellationJob.invoked.should be(true)
-      queued_job_count.should eq 0
+      expect(CompletionJob.invoked).to be(false)
+      expect(CancellationJob.invoked).to be(true)
+      expect(queued_job_count).to eq 0
     end
 
     it "runs the cancellation job after the job group is cancelled" do
@@ -197,13 +197,13 @@ describe Delayed::JobGroups::Plugin do
       job_group.cancel
 
       # cancellation job should be queued
-      queued_job_count.should eq 1
-      CancellationJob.invoked.should be(false)
+      expect(queued_job_count).to eq 1
+      expect(CancellationJob.invoked).to be(false)
 
       # Run the cancellation job
       Delayed::Worker.new.work_off(1)
-      CancellationJob.invoked.should be(true)
-      queued_job_count.should eq 0
+      expect(CancellationJob.invoked).to be(true)
+      expect(queued_job_count).to eq 0
     end
   end
 
@@ -214,21 +214,21 @@ describe Delayed::JobGroups::Plugin do
       job_group.enqueue(NoOpJob.new)
       job_group.enqueue(NoOpJob.new)
       job_group.mark_queueing_complete
-      job_group_count.should eq 1
-      queued_job_count.should eq 2
-      failed_job_count.should eq 0
+      expect(job_group_count).to eq 1
+      expect(queued_job_count).to eq 2
+      expect(failed_job_count).to eq 0
 
       # Run our first job
       Delayed::Worker.new.work_off(1)
-      job_group_count.should eq 1
-      queued_job_count.should eq 1
-      failed_job_count.should eq 0
+      expect(job_group_count).to eq 1
+      expect(queued_job_count).to eq 1
+      expect(failed_job_count).to eq 0
 
       # Run our second job which should delete the job group
       Delayed::Worker.new.work_off(1)
-      job_group_count.should eq 0
-      queued_job_count.should eq 0
-      failed_job_count.should eq 0
+      expect(job_group_count).to eq 0
+      expect(queued_job_count).to eq 0
+      expect(failed_job_count).to eq 0
     end
   end
 
