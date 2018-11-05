@@ -35,8 +35,6 @@ module Delayed
         end
       end
 
-      private
-
       def self.job_group_cancelled?(job_group_id)
         !JobGroup.exists?(job_group_id)
       end

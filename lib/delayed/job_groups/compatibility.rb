@@ -8,7 +8,7 @@ module Delayed
     module Compatibility
 
       def self.mass_assignment_security_enabled?
-        ::ActiveRecord::VERSION::MAJOR < 4 || defined?(::ActiveRecord::MassAssignmentSecurity)
+        defined?(::ActiveRecord::MassAssignmentSecurity)
       end
 
     end

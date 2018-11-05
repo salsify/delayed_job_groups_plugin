@@ -1,21 +1,16 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe Delayed::JobGroups::Plugin do
-
-  before(:all) do
+  before do
     @old_max_attempts = Delayed::Worker.max_attempts
     Delayed::Worker.max_attempts = 2
-  end
 
-  after(:all) do
-    Delayed::Worker.max_attempts = @old_max_attempts
-  end
-
-  before do
     CompletionJob.invoked = false
     CancellationJob.invoked = false
+  end
+
+  after do
+    Delayed::Worker.max_attempts = @old_max_attempts
   end
 
   let!(:job_group) { Delayed::JobGroups::JobGroup.create!(on_completion_job: CompletionJob.new) }
