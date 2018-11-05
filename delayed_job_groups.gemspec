@@ -17,28 +17,22 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.1'
+  spec.required_ruby_version = '>= 2.3'
 
   spec.add_dependency 'delayed_job', '>= 4.1'
-  spec.add_dependency 'delayed_job_active_record', '>= 0.4'
+  spec.add_dependency 'delayed_job_active_record', '>= 4.1'
 
   spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
 
-  spec.add_development_dependency 'activerecord', ENV.fetch('RAILS_VERSION', ['>= 3.2', '< 5.2'])
+  spec.add_development_dependency 'appraisal'
+  spec.add_dependency 'activerecord', '>= 4.2', '< 5.3'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
-  # rspec < 3.5 requires rake < 11.0
-  spec.add_development_dependency 'rake', '< 11.0'
-  spec.add_development_dependency 'rspec', '>= 2.14', '< 2.99'
-  spec.add_development_dependency 'simplecov', '~> 0.7.1'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec', '~> 3'
+  spec.add_development_dependency 'rspec-its'
+  spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'timecop'
-  spec.add_development_dependency 'mime-types', '~> 2'
-
-  if RUBY_PLATFORM == 'java'
-    spec.add_development_dependency 'jdbc-sqlite3'
-    spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
-  else
-    spec.add_development_dependency 'sqlite3'
-  end
-
+  spec.add_development_dependency 'mime-types'
+  spec.add_development_dependency 'sqlite3'
 end

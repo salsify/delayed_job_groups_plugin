@@ -11,6 +11,7 @@ SimpleCov.start do
  add_filter 'spec'
 end
 
+require 'rspec/its'
 require 'database_cleaner'
 require 'delayed_job_groups_plugin'
 require 'yaml'
@@ -35,7 +36,6 @@ ActiveRecord::Base.establish_connection(config[db_adapter])
 require 'db/schema'
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.order = 'random'
 
   config.before(:suite) do

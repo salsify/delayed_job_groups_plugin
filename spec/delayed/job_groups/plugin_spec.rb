@@ -29,19 +29,19 @@ describe Delayed::JobGroups::Plugin do
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 1
     queued_job_count.should eq 1
 
     # Run our second job which should enqueue the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 0
     queued_job_count.should eq 1
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_true
+    CompletionJob.invoked.should be(true)
     queued_job_count.should eq 0
   end
 
@@ -53,13 +53,13 @@ describe Delayed::JobGroups::Plugin do
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 1
     queued_job_count.should eq 1
 
     # Run our second job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 1
     queued_job_count.should eq 0
 
@@ -70,7 +70,7 @@ describe Delayed::JobGroups::Plugin do
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_true
+    CompletionJob.invoked.should be(true)
     queued_job_count.should eq 0
   end
 
@@ -88,7 +88,7 @@ describe Delayed::JobGroups::Plugin do
 
         # Run the job which should fail and cancel the JobGroup
         Delayed::Worker.new.work_off(1)
-        CompletionJob.invoked.should be_false
+        CompletionJob.invoked.should be(false)
         failed_job_count.should eq 1
         queued_job_count.should eq 0
         job_group_count.should eq 0
@@ -110,7 +110,7 @@ describe Delayed::JobGroups::Plugin do
 
         # Run the job which should fail don't cancel the JobGroup
         Delayed::Worker.new.work_off(1)
-        CancellationJob.invoked.should be_false
+        CancellationJob.invoked.should be(false)
         failed_job_count.should eq 1
         queued_job_count.should eq 1
         job_group_count.should eq 1
@@ -148,19 +148,19 @@ describe Delayed::JobGroups::Plugin do
 
     # Run our first job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 1
     Delayed::Job.count.should eq 1
 
     # Run our second job which should enqueue the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_false
+    CompletionJob.invoked.should be(false)
     job_group_count.should eq 0
     Delayed::Job.count.should eq 1
 
     # Now we should run the completion job
     Delayed::Worker.new.work_off(1)
-    CompletionJob.invoked.should be_true
+    CompletionJob.invoked.should be(true)
     Delayed::Job.count.should eq 0
   end
 
@@ -181,8 +181,8 @@ describe Delayed::JobGroups::Plugin do
 
       # Run the job which should fail and cancel the JobGroup
       Delayed::Worker.new.work_off(1)
-      CompletionJob.invoked.should be_false
-      CancellationJob.invoked.should be_false
+      CompletionJob.invoked.should be(false)
+      CancellationJob.invoked.should be(false)
       failed_job_count.should eq 1
 
       queued_job_count.should eq 1
@@ -190,8 +190,8 @@ describe Delayed::JobGroups::Plugin do
 
       # Now we should run the cancellation job
       Delayed::Worker.new.work_off(1)
-      CompletionJob.invoked.should be_false
-      CancellationJob.invoked.should be_true
+      CompletionJob.invoked.should be(false)
+      CancellationJob.invoked.should be(true)
       queued_job_count.should eq 0
     end
 
@@ -203,11 +203,11 @@ describe Delayed::JobGroups::Plugin do
 
       #cancellation job should be queued
       queued_job_count.should eq 1
-      CancellationJob.invoked.should be_false
+      CancellationJob.invoked.should be(false)
 
       # Run the cancellation job
       Delayed::Worker.new.work_off(1)
-      CancellationJob.invoked.should be_true
+      CancellationJob.invoked.should be(true)
       queued_job_count.should eq 0
     end
   end
