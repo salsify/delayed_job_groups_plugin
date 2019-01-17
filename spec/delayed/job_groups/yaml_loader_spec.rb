@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Delayed::JobGroups::YamlLoader do
   class Foo; end
 
