@@ -10,11 +10,13 @@ describe Delayed::JobGroups::YamlLoader do
       end
     end
 
-    context "with an incorrect yaml object representation" do
-      let(:yaml) { 'foo' }
+    context "with incorrect yaml object representations" do
+      let(:not_yaml1) { 'foo' }
+      let(:not_yaml2) { 1 }
 
       it "deserializes properly" do
-        expect(Delayed::JobGroups::YamlLoader.load(yaml)).to eq('foo')
+        expect(Delayed::JobGroups::YamlLoader.load(not_yaml1)).to eq('foo')
+        expect(Delayed::JobGroups::YamlLoader.load(not_yaml2)).to eq(1)
       end
     end
   end
