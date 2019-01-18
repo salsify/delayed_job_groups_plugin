@@ -8,6 +8,7 @@ require 'delayed/job_groups/compatibility'
 require 'delayed/job_groups/job_extensions'
 require 'delayed/job_groups/job_group'
 require 'delayed/job_groups/plugin'
+require 'delayed/job_groups/yaml_loader'
 require 'delayed/job_groups/version'
 
 Delayed::Backend::ActiveRecord::Job.send(:include, Delayed::JobGroups::JobExtensions)

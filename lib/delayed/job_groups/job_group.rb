@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'yaml_loader'
+
 module Delayed
   module JobGroups
     class JobGroup < ActiveRecord::Base
@@ -11,9 +13,9 @@ module Delayed
                         :on_cancellation_job_options, :failure_cancels_group
       end
 
-      serialize :on_completion_job
+      serialize :on_completion_job, Delayed::JobGroups::YamlLoader
       serialize :on_completion_job_options, Hash
-      serialize :on_cancellation_job
+      serialize :on_cancellation_job, Delayed::JobGroups::YamlLoader
       serialize :on_cancellation_job_options, Hash
 
       validates :queueing_complete, :blocked, :failure_cancels_group, inclusion: [true, false]
