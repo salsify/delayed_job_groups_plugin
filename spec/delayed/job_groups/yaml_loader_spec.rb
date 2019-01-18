@@ -7,7 +7,7 @@ describe Delayed::JobGroups::YamlLoader do
     context "with a correct yaml object representation" do
       let(:yaml) { '--- !ruby/object:Foo {}' }
 
-      it "deserializes properly" do
+      it "deserializes from YAML properly" do
         expect(Delayed::JobGroups::YamlLoader.load(yaml)).to be_a(Foo)
       end
     end
@@ -16,7 +16,7 @@ describe Delayed::JobGroups::YamlLoader do
       let(:not_yaml1) { 'foo' }
       let(:not_yaml2) { 1 }
 
-      it "deserializes properly" do
+      it "deserializes from YAML properly" do
         expect(Delayed::JobGroups::YamlLoader.load(not_yaml1)).to eq('foo')
         expect(Delayed::JobGroups::YamlLoader.load(not_yaml2)).to eq(1)
       end
@@ -27,7 +27,7 @@ describe Delayed::JobGroups::YamlLoader do
     context "with an object" do
       let(:object) { Foo.new }
 
-      it "deserializes properly" do
+      it "serializes into YAML properly" do
         expect(Delayed::JobGroups::YamlLoader.dump(object)).to eq("--- !ruby/object:Foo {}\n")
       end
     end
@@ -35,7 +35,7 @@ describe Delayed::JobGroups::YamlLoader do
     context "with a nil object" do
       let(:object) { nil }
 
-      it "deserializes properly" do
+      it "serializes into YAML properly" do
         expect(Delayed::JobGroups::YamlLoader.dump(object)).to eq(nil)
       end
     end
