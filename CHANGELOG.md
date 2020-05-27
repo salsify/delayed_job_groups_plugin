@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.4.2
+* Add support for Rails 6.0.
+
 ### 0.4.1
 * Bugfix for `on_completion_job` and `on_cancellation_job` YAML serialization
 
