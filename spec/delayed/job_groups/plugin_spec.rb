@@ -83,6 +83,7 @@ describe Delayed::JobGroups::Plugin do
 
         # Run the job which should fail and cancel the JobGroup
         Delayed::Worker.new.work_off(1)
+        # Completion job is not invoked
         expect(CompletionJob.invoked).to be(false)
         expect(failed_job_count).to eq 1
         expect(queued_job_count).to eq 0
@@ -109,6 +110,59 @@ describe Delayed::JobGroups::Plugin do
         expect(failed_job_count).to eq 1
         expect(queued_job_count).to eq 1
         expect(job_group_count).to eq 1
+
+        # Run the last job
+        Delayed::Worker.new.work_off(1)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 1
+        expect(job_group_count).to eq 0
+
+        # Run the completion job
+        Delayed::Worker.new.work_off(1)
+        # Completion job is invoked
+        expect(CompletionJob.invoked).to be(true)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 0
+        expect(job_group_count).to eq 0
+      end
+
+      it "runs completion job if last job failed" do
+        Delayed::Worker.max_attempts = 2
+
+        job_group.enqueue(NoOpJob.new)
+        job_group.enqueue(FailingJob.new)
+        job_group.mark_queueing_complete
+        expect(queued_job_count).to eq 2
+        expect(job_group_count).to eq 1
+
+        # Run the non failing job
+        Delayed::Worker.new.work_off(1)
+        expect(failed_job_count).to eq 0
+        expect(queued_job_count).to eq 1
+        expect(job_group_count).to eq 1
+
+        # Run the job which should error
+        Delayed::Worker.new.work_off(1)
+        # Completion job is not invoked
+        expect(CompletionJob.invoked).to be(false)
+        expect(failed_job_count).to eq 0
+        expect(queued_job_count).to eq 1
+        expect(job_group_count).to eq 1
+
+        # Run the job again which should fail
+        Timecop.travel(1.minute.from_now)
+        Delayed::Worker.new.work_off(1)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 1
+        expect(job_group_count).to eq 0
+
+        # Run the completion job
+        Delayed::Worker.new.work_off(1)
+        # Completion job is invoked
+        expect(CompletionJob.invoked).to be(true)
+        expect(failed_job_count).to eq 1
+        expect(queued_job_count).to eq 0
+        expect(job_group_count).to eq 0
       end
     end
   end
