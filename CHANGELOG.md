@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.4.3
+* Bugfix for `on_completion_job` when `failure_cancels_group` is set to false.
+
 ### 0.4.2
 * Add support for Rails 6.0.
 

@@ -28,8 +28,9 @@ module Delayed
 
         lifecycle.after(:perform) do |_worker, job|
           # Make sure we only check to see if the job group is complete
-          # if the job succeeded
-          if job.in_job_group? && job_completed?(job)
+          # if the job succeeded or the job has failed (maxed out retries) with failure_cancels_group
+          # set to false
+          if job.in_job_group? && (job_completed?(job) || job_acceptably_failed?(job))
             JobGroup.check_for_completion(job.job_group_id)
           end
         end
@@ -43,6 +44,12 @@ module Delayed
         # Delayed job will already have marked the job for destruction
         # if it has completed
         job.destroyed?
+      end
+
+      def self.job_acceptably_failed?(job)
+        # Job has set failed_at (retries have maxed out) and failure_cancels_group is false signaling
+        # that the group should complete despite failures.
+        job.failed_at.present? && job.job_group.present? && !job.job_group.failure_cancels_group?
       end
     end
   end

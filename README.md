@@ -100,7 +100,8 @@ job_group.cancel
 
 Configuration to allow failed jobs not to cancel the group
 ```ruby
-# We can optionally pass options that will allow jobs to fail without cancelling the group
+# We can optionally pass options that will allow jobs to fail without cancelling the group.
+# This also allows the on_completion job to fire once all jobs have either succeeded or failed. 
 job_group = Delayed::JobGroups::JobGroup.create!(failure_cancels_group: false)
 ```
 
