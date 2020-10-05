@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-appraise 'rails-4.2' do
-  gem 'sqlite3', '~> 1.3.6'
-  gem 'activerecord', '4.2.10'
-  gem 'activesupport', '4.2.10'
-end
-
 appraise 'rails-5.0' do
   gem 'sqlite3', '~> 1.3.6'
   gem 'activerecord', '5.0.7'
@@ -20,8 +14,8 @@ end
 
 appraise 'rails-5.2' do
   gem 'sqlite3', '~> 1.3.6'
-  gem 'activerecord', '5.2.1 '
-  gem 'activesupport', '5.2.1 '
+  gem 'activerecord', '5.2.1'
+  gem 'activesupport', '5.2.1'
 end
 
 appraise 'rails-6.0' do

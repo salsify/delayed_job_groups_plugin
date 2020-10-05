@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.5.0
+* Drop support for Ruby 2.3 and 2.4.
+* Drop support for Rails < 5.0.
+
 ### 0.4.3
 * Bugfix for `on_completion_job` when `failure_cancels_group` is set to false.
 
