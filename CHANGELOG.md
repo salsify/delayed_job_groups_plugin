@@ -2,7 +2,7 @@
 
 ### 0.5.0
 * Drop support for Ruby 2.3 and 2.4.
-* Drop support for Rails < 5.0.
+* Drop support for Rails < 5.2.
 * Bugfix for rails version in generated migration files
 
 ### 0.4.3
