@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateDelayedJobGroups < ActiveRecord::Migration
+class CreateDelayedJobGroups < ActiveRecord::Migration[<%= ActiveRecord::VERSION::MAJOR %>.<%= ActiveRecord::VERSION::MINOR %>]
 
   def up
     add_column(:delayed_jobs, :blocked, :boolean, default: false, null: false)
