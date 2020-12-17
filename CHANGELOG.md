@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.6.0
+* A support for Rails 6.1.
+
 ### 0.5.0
 * Drop support for Ruby 2.3 and 2.4.
 * Drop support for Rails < 5.2.
