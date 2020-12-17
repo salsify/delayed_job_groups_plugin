@@ -93,7 +93,7 @@ describe Delayed::JobGroups::Plugin do
 
     context "with failure_cancels_group disabled" do
 
-      before { job_group.update_attributes!(failure_cancels_group: false) }
+      before { job_group.update!(failure_cancels_group: false) }
 
       it "does not cancel the group" do
         Delayed::Worker.max_attempts = 1

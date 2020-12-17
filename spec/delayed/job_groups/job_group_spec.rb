@@ -103,7 +103,7 @@ describe Delayed::JobGroups::JobGroup do
 
     context "when on failed jobs exist" do
       before do
-        job.update_attributes!(failed_at: Time.now)
+        job.update!(failed_at: Time.now)
         Delayed::JobGroups::JobGroup.check_for_completion(job_group.id)
       end
 
@@ -229,7 +229,7 @@ describe Delayed::JobGroups::JobGroup do
     let(:failure_cancels_group) { true }
 
     before do
-      job_group.update_attributes!(failure_cancels_group: failure_cancels_group)
+      job_group.update!(failure_cancels_group: failure_cancels_group)
     end
 
     context "when failures should cancel the group" do
