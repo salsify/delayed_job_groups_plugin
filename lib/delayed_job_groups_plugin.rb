@@ -14,10 +14,10 @@ require 'delayed/job_groups/version'
 if defined?(Delayed::Backend::ActiveRecord)
   if defined?(Rails::Railtie)
     # Postpone initialization to railtie for correct order
-    require 'delayed/job_groups/backend/active_record/railtie'
+    require 'delayed/job_groups/railtie'
   else
     # Do the same as in the railtie
-    Delayed::Backend::ActiveRecord::Job.send(:include, Delayed::JobGroups::JobExtensions)
+    Delayed::Backend::ActiveRecord::Job.include(Delayed::JobGroups::JobExtensions)
   end
 end
 
