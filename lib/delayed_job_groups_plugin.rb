@@ -11,6 +11,10 @@ require 'delayed/job_groups/plugin'
 require 'delayed/job_groups/yaml_loader'
 require 'delayed/job_groups/version'
 
-Delayed::Backend::ActiveRecord::Job.send(:include, Delayed::JobGroups::JobExtensions)
+if defined?(Rails)
+  require 'delayed/job_groups/railtie'
+else
+  require 'delayed/job_groups/patch'
+end
 
 Delayed::Worker.plugins << Delayed::JobGroups::Plugin
