@@ -1,7 +1,10 @@
 # Changelog
 
+### 0.6.1
+* Fix job_group_id `belongs_to` behavior when `config.active_record.belongs_to_required_by_default` is enabled.
+
 ### 0.6.0
-* A support for Rails 6.1.
+* Add support for Rails 6.1.
 
 ### 0.5.0
 * Drop support for Ruby 2.3 and 2.4.

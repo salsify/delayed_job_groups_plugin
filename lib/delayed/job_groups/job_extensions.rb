@@ -15,7 +15,7 @@ module Delayed
           attr_accessible :job_group_id, :blocked
         end
 
-        belongs_to :job_group, class_name: 'Delayed::JobGroups::JobGroup'
+        belongs_to :job_group, class_name: 'Delayed::JobGroups::JobGroup', required: false
 
         class << self
           prepend ReadyToRunExtension
