@@ -1,5 +1,8 @@
 # Changelog
 
+### 0.6.2
+* Defer including extension until delayed_job_active_record is loaded
+
 ### 0.6.1
 * Fix job_group_id `belongs_to` behavior when `config.active_record.belongs_to_required_by_default` is enabled.
 
