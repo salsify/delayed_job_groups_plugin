@@ -1,4 +1,7 @@
 # Changelog
+### 0.7.0
+* Add support for ruby 3
+* Drop support for ruby < 2.6
 
 ### 0.6.2
 * Defer including extension until delayed_job_active_record is loaded
