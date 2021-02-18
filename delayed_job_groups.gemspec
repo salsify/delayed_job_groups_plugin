@@ -23,7 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'delayed_job', '>= 4.1'
   spec.add_dependency 'delayed_job_active_record', '>= 4.1'
 
-  spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
+  spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation '\
+                              'for upgrade/installation notes.'
 
   spec.add_development_dependency 'appraisal'
   spec.add_dependency 'activerecord', '>= 5.2', '< 7'
