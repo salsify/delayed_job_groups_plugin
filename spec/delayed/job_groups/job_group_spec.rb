@@ -50,6 +50,7 @@ describe Delayed::JobGroups::JobGroup do
       before { job_group.mark_queueing_complete }
 
       it { is_expected.to be_queueing_complete }
+
       it_behaves_like "the job group was completed"
     end
 
@@ -59,6 +60,7 @@ describe Delayed::JobGroups::JobGroup do
       before { job_group.mark_queueing_complete }
 
       it { is_expected.to be_queueing_complete }
+
       it_behaves_like "the job group was not completed"
     end
 
@@ -69,6 +71,7 @@ describe Delayed::JobGroups::JobGroup do
       end
 
       it { is_expected.to be_queueing_complete }
+
       it_behaves_like "the job group was not completed"
     end
   end
@@ -199,6 +202,7 @@ describe Delayed::JobGroups::JobGroup do
         end
 
         its(:blocked?) { is_expected.to be(false) }
+
         it_behaves_like "the job group was completed"
       end
     end
