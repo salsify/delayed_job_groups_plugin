@@ -30,6 +30,7 @@ module Delayed
       def mark_queueing_complete
         with_lock do
           raise 'JobGroup has already completed queueing' if queueing_complete?
+
           update_column(:queueing_complete, true)
           complete if ready_for_completion?
         end
@@ -73,6 +74,7 @@ module Delayed
       def self.has_pending_jobs?(job_group_ids) # rubocop:disable Naming/PredicateName
         job_group_ids = Array(job_group_ids)
         return false if job_group_ids.empty?
+
         Delayed::Job.where(job_group_id: job_group_ids, failed_at: nil).exists?
       end
 
