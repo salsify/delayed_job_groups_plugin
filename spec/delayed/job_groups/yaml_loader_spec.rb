@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 describe Delayed::JobGroups::YamlLoader do
-  class Foo; end
-
   describe "#load" do
     context "with a correct yaml object representation" do
-      let(:yaml) { '--- !ruby/object:Foo {}' }
+      let(:yaml) { '--- !ruby/object:TestJobs::Foo {}' }
 
       it "deserializes from YAML properly" do
-        expect(Delayed::JobGroups::YamlLoader.load(yaml)).to be_a(Foo)
+        expect(Delayed::JobGroups::YamlLoader.load(yaml)).to be_a(TestJobs::Foo)
       end
     end
 
@@ -25,10 +23,10 @@ describe Delayed::JobGroups::YamlLoader do
 
   describe "#dump" do
     context "with an object" do
-      let(:object) { Foo.new }
+      let(:object) { TestJobs::Foo.new }
 
       it "serializes into YAML properly" do
-        expect(Delayed::JobGroups::YamlLoader.dump(object)).to eq("--- !ruby/object:Foo {}\n")
+        expect(Delayed::JobGroups::YamlLoader.dump(object)).to eq("--- !ruby/object:TestJobs::Foo {}\n")
       end
     end
 
