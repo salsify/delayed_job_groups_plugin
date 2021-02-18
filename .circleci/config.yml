@@ -2,14 +2,14 @@ version: 2.1
 jobs:
   lint:
     docker:
-      - image: salsify/ruby_ci:2.5.8
+      - image: salsify/ruby_ci:2.6.6
     working_directory: ~/delayed_job_groups
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-ruby-2.5.8-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "Gemfile" }}
-            - v1-gems-ruby-2.5.8-
+            - v1-gems-ruby-2.6.6-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "Gemfile" }}
+            - v1-gems-ruby-2.6.6-
       - run:
           name: Install Gems
           command: |
@@ -18,7 +18,7 @@ jobs:
               bundle clean
             fi
       - save_cache:
-          key: v1-gems-ruby-2.5.8-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "Gemfile" }}
+          key: v1-gems-ruby-2.6.6-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "Gemfile" }}
           paths:
             - "vendor/bundle"
             - "gemfiles/vendor/bundle"
@@ -29,8 +29,10 @@ jobs:
     parameters:
       gemfile:
         type: string
+      ruby_version:
+        type: string
     docker:
-      - image: salsify/ruby_ci:2.5.8
+      - image: salsify/ruby_ci:<< parameters.ruby_version >>
     environment:
       CIRCLE_TEST_REPORTS: "test-results"
       BUNDLE_GEMFILE: << parameters.gemfile >>
@@ -39,8 +41,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-ruby-2.5.8-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "<< parameters.gemfile >>" }}
-            - v1-gems-ruby-2.5.8-
+            - v1-gems-ruby-<< parameters.ruby_version >>-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "<< parameters.gemfile >>" }}
+            - v1-gems-ruby-<< parameters.ruby_version >>-
       - run:
           name: Install Gems
           command: |
@@ -49,7 +51,7 @@ jobs:
               bundle clean
             fi
       - save_cache:
-          key: v1-gems-ruby-2.5.8-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "<< parameters.gemfile >>" }}
+          key: v1-gems-ruby-<< parameters.ruby_version >>-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "<< parameters.gemfile >>" }}
           paths:
             - "vendor/bundle"
             - "gemfiles/vendor/bundle"
@@ -67,6 +69,13 @@ workflows:
           matrix:
             parameters:
               gemfile:
-              - "gemfiles/rails_5.2.gemfile"
-              - "gemfiles/rails_6.0.gemfile"
-              - "gemfiles/rails_6.1.gemfile"
+                - "gemfiles/rails_5.2.gemfile"
+                - "gemfiles/rails_6.0.gemfile"
+                - "gemfiles/rails_6.1.gemfile"
+              ruby_version:
+                - "2.6.6"
+                - "2.7.2"
+                - "3.0.0"
+            exclude:
+              - gemfile: "gemfiles/rails_5.2.gemfile"
+                ruby_version: "3.0.0"
