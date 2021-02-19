@@ -11,8 +11,6 @@ module Delayed
       end
 
       included do
-        attr_accessible :job_group_id, :blocked if Delayed::JobGroups::Compatibility.mass_assignment_security_enabled?
-
         belongs_to :job_group, class_name: 'Delayed::JobGroups::JobGroup', required: false
 
         class << self

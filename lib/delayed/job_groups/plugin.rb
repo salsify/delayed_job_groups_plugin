@@ -21,7 +21,7 @@ module Delayed
           # If a job in the job group fails, then cancel the whole job group.
           # Need to check that the job group is present since another
           # job may have concurrently cancelled it.
-          job.job_group.cancel if job.in_job_group? && job.job_group && job.job_group.failure_cancels_group?
+          job.job_group.cancel if job.in_job_group? && job.job_group&.failure_cancels_group?
         end
 
         lifecycle.after(:perform) do |_worker, job|
