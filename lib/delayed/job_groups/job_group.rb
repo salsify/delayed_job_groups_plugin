@@ -62,7 +62,7 @@ module Delayed
           # zero will queue the job group's completion job and destroy the job group so
           # other jobs need to handle the job group having been destroyed already.
           job_group = where(id: job_group_id).lock(true).first
-          job_group.complete if job_group&.ready_for_completion?
+          job_group.send(:complete) if job_group&.send(:ready_for_completion?)
         end
       end
 
@@ -73,11 +73,11 @@ module Delayed
         Delayed::Job.where(job_group_id: job_group_ids, failed_at: nil).exists?
       end
 
+      private
+
       def ready_for_completion?
         queueing_complete? && !JobGroup.has_pending_jobs?(id) && !blocked?
       end
-
-      private
 
       def complete
         Delayed::Job.enqueue(on_completion_job, on_completion_job_options || {}) if on_completion_job
