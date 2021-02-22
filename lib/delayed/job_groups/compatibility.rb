@@ -7,10 +7,6 @@ module Delayed
   module JobGroups
     module Compatibility
 
-      def self.mass_assignment_security_enabled?
-        defined?(::ActiveRecord::MassAssignmentSecurity)
-      end
-
     end
   end
 end

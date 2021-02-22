@@ -8,11 +8,6 @@ module Delayed
 
       self.table_name = "#{ActiveRecord::Base.table_name_prefix}delayed_job_groups"
 
-      if Delayed::JobGroups::Compatibility.mass_assignment_security_enabled?
-        attr_accessible :on_completion_job, :on_completion_job_options, :blocked, :on_cancellation_job,
-                        :on_cancellation_job_options, :failure_cancels_group
-      end
-
       serialize :on_completion_job, Delayed::JobGroups::YamlLoader
       serialize :on_completion_job_options, Hash
       serialize :on_cancellation_job, Delayed::JobGroups::YamlLoader
@@ -30,6 +25,7 @@ module Delayed
       def mark_queueing_complete
         with_lock do
           raise 'JobGroup has already completed queueing' if queueing_complete?
+
           update_column(:queueing_complete, true)
           complete if ready_for_completion?
         end
@@ -66,13 +62,14 @@ module Delayed
           # zero will queue the job group's completion job and destroy the job group so
           # other jobs need to handle the job group having been destroyed already.
           job_group = where(id: job_group_id).lock(true).first
-          job_group.send(:complete) if job_group && job_group.send(:ready_for_completion?)
+          job_group.send(:complete) if job_group&.send(:ready_for_completion?)
         end
       end
 
       def self.has_pending_jobs?(job_group_ids) # rubocop:disable Naming/PredicateName
         job_group_ids = Array(job_group_ids)
         return false if job_group_ids.empty?
+
         Delayed::Job.where(job_group_id: job_group_ids, failed_at: nil).exists?
       end
 

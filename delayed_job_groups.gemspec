@@ -1,7 +1,6 @@
-
 # frozen_string_literal: true
 
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'delayed/job_groups/version'
 
@@ -19,12 +18,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 2.6'
 
   spec.add_dependency 'delayed_job', '>= 4.1'
   spec.add_dependency 'delayed_job_active_record', '>= 4.1'
 
-  spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation for upgrade/installation notes.'
+  spec.post_install_message = 'See https://github.com/salsify/delayed_job_groups_plugin#installation '\
+                              'for upgrade/installation notes.'
 
   spec.add_development_dependency 'appraisal'
   spec.add_dependency 'activerecord', '>= 5.2', '< 7'
@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'rspec-its'
   spec.add_development_dependency 'rspec_junit_formatter'
-  spec.add_development_dependency 'salsify_rubocop', '0.52.1.1'
+  spec.add_development_dependency 'salsify_rubocop', '~> 1.0.1'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'timecop'
