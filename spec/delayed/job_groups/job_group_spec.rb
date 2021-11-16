@@ -148,6 +148,17 @@ describe Delayed::JobGroups::JobGroup do
         end
       end
 
+      let(:error_reporter) { Proc.new { |_error| } }
+
+      around do |example|
+        original_error_reporter = Delayed::JobGroups.configuration.error_reporter
+        Delayed::JobGroups.configuration.error_reporter = error_reporter
+        example.run
+        Delayed::JobGroups.configuration.error_reporter = original_error_reporter
+      end
+
+      before { allow(error_reporter).to receive(:call) }
+
       it "handles missing on_completion_job" do
         job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new,
                                                          on_completion_job_options: {})
@@ -162,6 +173,7 @@ describe Delayed::JobGroups::JobGroup do
 
         # Deserialization fails
         expect { Delayed::JobGroups::JobGroup.check_for_completion(job_group.id) }.not_to raise_error
+        expect(error_reporter).to have_received(:call)
         expect(job_group).to have_been_destroyed
       end
     end
@@ -267,6 +279,17 @@ describe Delayed::JobGroups::JobGroup do
                                              on_cancellation_job_options: {})
       end
 
+      let(:error_reporter) { Proc.new { |_error| } }
+
+      around do |example|
+        original_error_reporter = Delayed::JobGroups.configuration.error_reporter
+        Delayed::JobGroups.configuration.error_reporter = error_reporter
+        example.run
+        Delayed::JobGroups.configuration.error_reporter = original_error_reporter
+      end
+
+      before { allow(error_reporter).to receive(:call) }
+
       it "handles missing on_cancellation_job" do
         job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new,
                                                          on_cancellation_job_options: {})
@@ -278,6 +301,7 @@ describe Delayed::JobGroups::JobGroup do
 
         # Deserialization fails
         expect { job_group.cancel }.not_to raise_error
+        expect(error_reporter).to have_received(:call)
         expect(job_group).to have_been_destroyed
       end
     end

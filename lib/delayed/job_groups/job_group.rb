@@ -55,8 +55,9 @@ module Delayed
         begin
           job = on_cancellation_job
           job_options = on_cancellation_job_options
-        rescue StandardError
+        rescue StandardError => e
           Delayed::Worker.logger.info("Failed to deserialize the on_cancellation_job or on_cancellation_job_options for job_group_id=#{id}. Skipping on_cancellation_job to clean up job group.")
+          error_reporter.call(e) if error_reporter
         end
 
         Delayed::Job.enqueue(job, job_options || {}) if job
@@ -99,12 +100,17 @@ module Delayed
         begin
           job = on_completion_job
           job_options = on_completion_job_options
-        rescue StandardError
+        rescue StandardError => e
           Delayed::Worker.logger.info("Failed to deserialize the on_completion_job or on_completion_job_options for job_group_id=#{id}. Skipping on_completion_job to clean up job group.")
+          error_reporter.call(e) if error_reporter
         end
 
         Delayed::Job.enqueue(job, job_options || {}) if job
         destroy
+      end
+
+      def error_reporter
+        Delayed::JobGroups.configuration.error_reporter
       end
     end
   end

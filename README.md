@@ -101,9 +101,23 @@ job_group.cancel
 Configuration to allow failed jobs not to cancel the group
 ```ruby
 # We can optionally pass options that will allow jobs to fail without cancelling the group.
-# This also allows the on_completion job to fire once all jobs have either succeeded or failed. 
+# This also allows the on_completion job to fire once all jobs have either succeeded or failed.
 job_group = Delayed::JobGroups::JobGroup.create!(failure_cancels_group: false)
 ```
+
+### Job Group Plugin Options
+
+The job group plugin can be configured in an initializer (e.g. `config/initializers/delayed_job_groups_plugin.rb`) as follows:
+
+```ruby
+Delayed::JobGroups.configure do |configuration|
+  configuration.error_reporter = Proc.new { |error| Bugsnag.notify(error) }
+end
+```
+
+The plugin supports the following options (all of which are optional):
+
+* `error_reporter` - a callback proc that accepts an `Exception` if the plugin encounters an unexpected error. This can be useful for reporting to an error monitoring system.
 
 ## Supported Platforms
 
