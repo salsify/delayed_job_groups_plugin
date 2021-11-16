@@ -140,6 +140,31 @@ describe Delayed::JobGroups::JobGroup do
         expect(job_group).to have_been_destroyed
       end
     end
+
+    context "on_completion_job refers to missing class" do
+      module Delayed::JobGroups::JobGroupTestHelper
+        class OnCompletionJob
+
+        end
+      end
+
+      it "handles missing on_completion_job" do
+        job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new,
+                                                         on_completion_job_options: {})
+        job = Delayed::Job.create!(job_group_id: job_group.id)
+        job_group.mark_queueing_complete
+        job.destroy
+
+        # Remove the class for on_completion_job
+        Delayed::JobGroups::JobGroupTestHelper.module_eval do
+          remove_const 'OnCompletionJob'
+        end
+
+        # Deserialization fails
+        expect { Delayed::JobGroups::JobGroup.check_for_completion(job_group.id) }.not_to raise_error
+        expect(job_group).to have_been_destroyed
+      end
+    end
   end
 
   describe "#enqueue" do
@@ -212,20 +237,49 @@ describe Delayed::JobGroups::JobGroup do
     let!(:queued_job) { Delayed::Job.create!(job_group_id: job_group.id) }
     let!(:running_job)  { Delayed::Job.create!(job_group_id: job_group.id, locked_at: Time.now, locked_by: 'test') }
 
-    before do
-      job_group.cancel
+    context "with no on_cancellation_job" do
+      before do
+        job_group.cancel
+      end
+
+      it "destroys the job group" do
+        expect(job_group).to have_been_destroyed
+      end
+
+      it "destroys queued jobs" do
+        expect(queued_job).to have_been_destroyed
+      end
+
+      it "does not destroy running jobs" do
+        expect(running_job).not_to have_been_destroyed
+      end
     end
 
-    it "destroys the job group" do
-      expect(job_group).to have_been_destroyed
-    end
+    context "on_cancellation_job refers to missing class" do
+      module Delayed::JobGroups::JobGroupTestHelper
+        class OnCancellationJob
 
-    it "destroys queued jobs" do
-      expect(queued_job).to have_been_destroyed
-    end
+        end
+      end
 
-    it "does not destroy running jobs" do
-      expect(running_job).not_to have_been_destroyed
+      subject(:job_group) do
+        Delayed::JobGroups::JobGroup.create!(on_cancellation_job: Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new,
+                                             on_cancellation_job_options: {})
+      end
+
+      it "handles missing on_cancellation_job" do
+        job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new,
+                                                         on_cancellation_job_options: {})
+
+        # Remove the class for on_cancellation_job
+        Delayed::JobGroups::JobGroupTestHelper.module_eval do
+          remove_const 'OnCancellationJob'
+        end
+
+        # Deserialization fails
+        expect { job_group.cancel }.not_to raise_error
+        expect(job_group).to have_been_destroyed
+      end
     end
   end
 

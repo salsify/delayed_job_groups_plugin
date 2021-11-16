@@ -48,7 +48,19 @@ module Delayed
       end
 
       def cancel
-        Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
+        job = nil
+        job_options = nil
+
+        # Deserialization of the job or its options can fail
+        begin
+          job = on_cancellation_job
+          job_options = on_cancellation_job_options
+        rescue StandardError
+          Delayed::Worker.logger.info("Failed to deserialize the on_cancellation_job or on_cancellation_job_options for job_group_id=#{id}. Skipping on_cancellation_job to clean up job group.")
+        end
+
+        Delayed::Job.enqueue(job, job_options || {}) if job
+
         destroy
       end
 
@@ -80,7 +92,18 @@ module Delayed
       end
 
       def complete
-        Delayed::Job.enqueue(on_completion_job, on_completion_job_options || {}) if on_completion_job
+        job = nil
+        job_options = nil
+
+        # Deserialization of the job or its options can fail
+        begin
+          job = on_completion_job
+          job_options = on_completion_job_options
+        rescue StandardError
+          Delayed::Worker.logger.info("Failed to deserialize the on_completion_job or on_completion_job_options for job_group_id=#{id}. Skipping on_completion_job to clean up job group.")
+        end
+
+        Delayed::Job.enqueue(job, job_options || {}) if job
         destroy
       end
     end
