@@ -10,4 +10,3 @@ module Delayed
     end
   end
 end
-

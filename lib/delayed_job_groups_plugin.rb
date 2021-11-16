@@ -27,12 +27,10 @@ module Delayed
     @configuration = Delayed::JobGroups::Configuration.new
 
     class << self
+      attr_reader :configuration
+
       def configure
         yield(configuration) if block_given?
-      end
-
-      def configuration
-        @configuration
       end
     end
   end
