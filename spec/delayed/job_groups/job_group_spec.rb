@@ -142,11 +142,14 @@ describe Delayed::JobGroups::JobGroup do
     end
 
     context "on_completion_job refers to missing class" do
+      # The on_completion_job needs the class to be defined this way in order to serialize it
+      # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
       module Delayed::JobGroups::JobGroupTestHelper
         class OnCompletionJob
 
         end
       end
+      # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
 
       let(:error_reporter) { Proc.new { |_error| } }
 
@@ -160,7 +163,8 @@ describe Delayed::JobGroups::JobGroup do
       before { allow(error_reporter).to receive(:call) }
 
       it "handles missing on_completion_job" do
-        job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new,
+        on_completion_job = Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new
+        job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: on_completion_job,
                                                          on_completion_job_options: {})
         job = Delayed::Job.create!(job_group_id: job_group.id)
         job_group.mark_queueing_complete
@@ -268,16 +272,14 @@ describe Delayed::JobGroups::JobGroup do
     end
 
     context "on_cancellation_job refers to missing class" do
+      # The on_cancellation_job needs the class to be defined this way in order to serialize it
+      # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
       module Delayed::JobGroups::JobGroupTestHelper
         class OnCancellationJob
 
         end
       end
-
-      subject(:job_group) do
-        Delayed::JobGroups::JobGroup.create!(on_cancellation_job: Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new,
-                                             on_cancellation_job_options: {})
-      end
+      # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
 
       let(:error_reporter) { Proc.new { |_error| } }
 
@@ -291,7 +293,8 @@ describe Delayed::JobGroups::JobGroup do
       before { allow(error_reporter).to receive(:call) }
 
       it "handles missing on_cancellation_job" do
-        job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new,
+        on_cancellation_job = Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new
+        job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: on_cancellation_job,
                                                          on_cancellation_job_options: {})
 
         # Remove the class for on_cancellation_job
