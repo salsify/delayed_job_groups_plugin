@@ -1,4 +1,7 @@
 # Changelog
+## 0.8.0
+* Failure to deserialize on_cancellation_job or on_completion_job will not prevent clean up of the job group.
+
 ### 0.7.0
 * Add support for ruby 3
 * Drop support for ruby < 2.6
