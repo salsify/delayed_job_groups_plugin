@@ -142,6 +142,8 @@ describe Delayed::JobGroups::JobGroup do
     end
 
     context "on_completion_job refers to missing class" do
+      let(:error_reporter) { Proc.new { |_error| } }
+
       # The on_completion_job needs the class to be defined this way in order to serialize it
       # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
       before do
@@ -150,10 +152,11 @@ describe Delayed::JobGroups::JobGroup do
 
           end
         end
+
+        allow(error_reporter).to receive(:call)
       end
       # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
 
-      let(:error_reporter) { Proc.new { |_error| } }
 
       around do |example|
         original_error_reporter = Delayed::JobGroups.configuration.error_reporter
@@ -161,8 +164,6 @@ describe Delayed::JobGroups::JobGroup do
         example.run
         Delayed::JobGroups.configuration.error_reporter = original_error_reporter
       end
-
-      before { allow(error_reporter).to receive(:call) }
 
       it "handles missing on_completion_job" do
         on_completion_job = Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new
@@ -275,6 +276,8 @@ describe Delayed::JobGroups::JobGroup do
     end
 
     context "on_cancellation_job refers to missing class" do
+      let(:error_reporter) { Proc.new { |_error| } }
+
       # The on_cancellation_job needs the class to be defined this way in order to serialize it
       # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
       before do
@@ -283,10 +286,10 @@ describe Delayed::JobGroups::JobGroup do
 
           end
         end
+
+        allow(error_reporter).to receive(:call)
       end
       # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
-
-      let(:error_reporter) { Proc.new { |_error| } }
 
       around do |example|
         original_error_reporter = Delayed::JobGroups.configuration.error_reporter
@@ -294,8 +297,6 @@ describe Delayed::JobGroups::JobGroup do
         example.run
         Delayed::JobGroups.configuration.error_reporter = original_error_reporter
       end
-
-      before { allow(error_reporter).to receive(:call) }
 
       it "handles missing on_cancellation_job" do
         on_cancellation_job = Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new
