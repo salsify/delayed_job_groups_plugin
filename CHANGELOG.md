@@ -1,6 +1,9 @@
 # Changelog
 ## 0.8.0
 * Failure to deserialize on_cancellation_job or on_completion_job will not prevent clean up of the job group.
+* Adds `failed_at` to `delayed_job_groups` table. 
+Use `bundle exec rails g delayed_job_groups_plugin:add_failed_at_to_delayed_job_groups` to generate the migration to
+add this column.
 
 ### 0.7.0
 * Add support for ruby 3

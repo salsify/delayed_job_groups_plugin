@@ -55,15 +55,20 @@ module Delayed
         begin
           job = on_cancellation_job
           job_options = on_cancellation_job_options
-        rescue StandardError => e
+
+          self.class.transaction do
+            Delayed::Job.enqueue(job, job_options || {}) if job
+            destroy
+          end
+        rescue TypeError, LoadError, NameError, ArgumentError, SyntaxError, Psych::SyntaxError => e
           Delayed::Worker.logger.info('Failed to deserialize the on_cancellation_job or on_cancellation_job_options ' \
                                       "for job_group_id=#{id}. Skipping on_cancellation_job to clean up job group.")
           error_reporter.call(e) if error_reporter
+          self.class.transaction do
+            update_columns(failed_at: Time.now)
+            queued_jobs.delete_all
+          end
         end
-
-        Delayed::Job.enqueue(job, job_options || {}) if job
-
-        destroy
       end
 
       def self.check_for_completion(job_group_id)
@@ -101,14 +106,15 @@ module Delayed
         begin
           job = on_completion_job
           job_options = on_completion_job_options
-        rescue StandardError => e
+
+          Delayed::Job.enqueue(job, job_options || {}) if job
+          destroy
+        rescue TypeError, LoadError, NameError, ArgumentError, SyntaxError, Psych::SyntaxError => e
           Delayed::Worker.logger.info('Failed to deserialize the on_completion_job or on_completion_job_options for ' \
                                       "job_group_id=#{id}. Skipping on_completion_job to clean up job group.")
           error_reporter.call(e) if error_reporter
+          update_columns(failed_at: Time.now)
         end
-
-        Delayed::Job.enqueue(job, job_options || {}) if job
-        destroy
       end
 
       def error_reporter

@@ -144,9 +144,11 @@ describe Delayed::JobGroups::JobGroup do
     context "on_completion_job refers to missing class" do
       # The on_completion_job needs the class to be defined this way in order to serialize it
       # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
-      module Delayed::JobGroups::JobGroupTestHelper
-        class OnCompletionJob
+      before do
+        module Delayed::JobGroups::JobGroupTestHelper
+          class OnCompletionJob
 
+          end
         end
       end
       # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
@@ -178,7 +180,8 @@ describe Delayed::JobGroups::JobGroup do
         # Deserialization fails
         expect { Delayed::JobGroups::JobGroup.check_for_completion(job_group.id) }.not_to raise_error
         expect(error_reporter).to have_received(:call)
-        expect(job_group).to have_been_destroyed
+        expect(job_group).not_to have_been_destroyed
+        expect(job_group.reload.failed_at).to be_present
       end
     end
   end
@@ -274,9 +277,11 @@ describe Delayed::JobGroups::JobGroup do
     context "on_cancellation_job refers to missing class" do
       # The on_cancellation_job needs the class to be defined this way in order to serialize it
       # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
-      module Delayed::JobGroups::JobGroupTestHelper
-        class OnCancellationJob
+      before do
+        module Delayed::JobGroups::JobGroupTestHelper
+          class OnCancellationJob
 
+          end
         end
       end
       # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
@@ -305,7 +310,8 @@ describe Delayed::JobGroups::JobGroup do
         # Deserialization fails
         expect { job_group.cancel }.not_to raise_error
         expect(error_reporter).to have_received(:call)
-        expect(job_group).to have_been_destroyed
+        expect(job_group).not_to have_been_destroyed
+        expect(job_group.reload.failed_at).to be_present
       end
     end
   end
