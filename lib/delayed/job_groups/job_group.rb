@@ -48,16 +48,10 @@ module Delayed
       end
 
       def cancel
-        job = nil
-        job_options = nil
-
-        # Deserialization of the job or its options can fail
         begin
-          job = on_cancellation_job
-          job_options = on_cancellation_job_options
-
           self.class.transaction do
-            Delayed::Job.enqueue(job, job_options || {}) if job
+            # Deserialization of the job or its options can fail
+            Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
             destroy
           end
         rescue TypeError, LoadError, NameError, ArgumentError, SyntaxError, Psych::SyntaxError => e
@@ -99,15 +93,9 @@ module Delayed
       end
 
       def complete
-        job = nil
-        job_options = nil
-
-        # Deserialization of the job or its options can fail
         begin
-          job = on_completion_job
-          job_options = on_completion_job_options
-
-          Delayed::Job.enqueue(job, job_options || {}) if job
+          # Deserialization of the job or its options can fail
+          Delayed::Job.enqueue(on_completion_job, on_completion_job_options || {}) if on_completion_job
           destroy
         rescue TypeError, LoadError, NameError, ArgumentError, SyntaxError, Psych::SyntaxError => e
           Delayed::Worker.logger.info('Failed to deserialize the on_completion_job or on_completion_job_options for ' \
