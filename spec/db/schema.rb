@@ -26,5 +26,6 @@ ActiveRecord::Schema.define(version: 0) do
     t.boolean :failure_cancels_group, default: true, null: false
     t.boolean :queueing_complete, default: false, null: false
     t.boolean :blocked, default: false, null: false
+    t.timestamp :failed_at
   end
 end

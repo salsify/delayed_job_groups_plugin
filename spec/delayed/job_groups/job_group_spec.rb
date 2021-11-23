@@ -140,6 +140,51 @@ describe Delayed::JobGroups::JobGroup do
         expect(job_group).to have_been_destroyed
       end
     end
+
+    context "on_completion_job refers to missing class" do
+      let(:error_reporter) { Proc.new { |_error| } }
+
+      # The on_completion_job needs the class to be defined this way in order to serialize it
+      # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
+      before do
+        module Delayed::JobGroups::JobGroupTestHelper
+          class OnCompletionJob
+
+          end
+        end
+
+        allow(error_reporter).to receive(:call)
+      end
+      # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
+
+
+      around do |example|
+        original_error_reporter = Delayed::JobGroups.configuration.error_reporter
+        Delayed::JobGroups.configuration.error_reporter = error_reporter
+        example.run
+        Delayed::JobGroups.configuration.error_reporter = original_error_reporter
+      end
+
+      it "handles missing on_completion_job" do
+        on_completion_job = Delayed::JobGroups::JobGroupTestHelper::OnCompletionJob.new
+        job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: on_completion_job,
+                                                         on_completion_job_options: {})
+        job = Delayed::Job.create!(job_group_id: job_group.id)
+        job_group.mark_queueing_complete
+        job.destroy
+
+        # Remove the class for on_completion_job
+        Delayed::JobGroups::JobGroupTestHelper.module_eval do
+          remove_const 'OnCompletionJob'
+        end
+
+        # Deserialization fails
+        expect { Delayed::JobGroups::JobGroup.check_for_completion(job_group.id) }.not_to raise_error
+        expect(error_reporter).to have_received(:call)
+        expect(job_group).not_to have_been_destroyed
+        expect(job_group.reload.failed_at).to be_present
+      end
+    end
   end
 
   describe "#enqueue" do
@@ -212,20 +257,63 @@ describe Delayed::JobGroups::JobGroup do
     let!(:queued_job) { Delayed::Job.create!(job_group_id: job_group.id) }
     let!(:running_job)  { Delayed::Job.create!(job_group_id: job_group.id, locked_at: Time.now, locked_by: 'test') }
 
-    before do
-      job_group.cancel
+    context "with no on_cancellation_job" do
+      before do
+        job_group.cancel
+      end
+
+      it "destroys the job group" do
+        expect(job_group).to have_been_destroyed
+      end
+
+      it "destroys queued jobs" do
+        expect(queued_job).to have_been_destroyed
+      end
+
+      it "does not destroy running jobs" do
+        expect(running_job).not_to have_been_destroyed
+      end
     end
 
-    it "destroys the job group" do
-      expect(job_group).to have_been_destroyed
-    end
+    context "on_cancellation_job refers to missing class" do
+      let(:error_reporter) { Proc.new { |_error| } }
 
-    it "destroys queued jobs" do
-      expect(queued_job).to have_been_destroyed
-    end
+      # The on_cancellation_job needs the class to be defined this way in order to serialize it
+      # rubocop:disable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
+      before do
+        module Delayed::JobGroups::JobGroupTestHelper
+          class OnCancellationJob
 
-    it "does not destroy running jobs" do
-      expect(running_job).not_to have_been_destroyed
+          end
+        end
+
+        allow(error_reporter).to receive(:call)
+      end
+      # rubocop:enable RSpec/LeakyConstantDeclaration,Style/ClassAndModuleChildren,Lint/ConstantDefinitionInBlock
+
+      around do |example|
+        original_error_reporter = Delayed::JobGroups.configuration.error_reporter
+        Delayed::JobGroups.configuration.error_reporter = error_reporter
+        example.run
+        Delayed::JobGroups.configuration.error_reporter = original_error_reporter
+      end
+
+      it "handles missing on_cancellation_job" do
+        on_cancellation_job = Delayed::JobGroups::JobGroupTestHelper::OnCancellationJob.new
+        job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: on_cancellation_job,
+                                                         on_cancellation_job_options: {})
+
+        # Remove the class for on_cancellation_job
+        Delayed::JobGroups::JobGroupTestHelper.module_eval do
+          remove_const 'OnCancellationJob'
+        end
+
+        # Deserialization fails
+        expect { job_group.cancel }.not_to raise_error
+        expect(error_reporter).to have_received(:call)
+        expect(job_group).not_to have_been_destroyed
+        expect(job_group.reload.failed_at).to be_present
+      end
     end
   end
 

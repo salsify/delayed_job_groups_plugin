@@ -4,6 +4,7 @@ require 'active_support'
 require 'active_record'
 require 'delayed_job'
 require 'delayed_job_active_record'
+require 'delayed/job_groups/configuration'
 require 'delayed/job_groups/compatibility'
 require 'delayed/job_groups/job_extensions'
 require 'delayed/job_groups/job_group'
@@ -20,3 +21,17 @@ else
 end
 
 Delayed::Worker.plugins << Delayed::JobGroups::Plugin
+
+module Delayed
+  module JobGroups
+    @configuration = Delayed::JobGroups::Configuration.new
+
+    class << self
+      attr_reader :configuration
+
+      def configure
+        yield(configuration) if block_given?
+      end
+    end
+  end
+end

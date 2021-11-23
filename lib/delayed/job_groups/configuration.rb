@@ -2,6 +2,8 @@
 
 module Delayed
   module JobGroups
-    VERSION = '0.8.0'
+    class Configuration
+      attr_accessor :error_reporter
+    end
   end
 end
