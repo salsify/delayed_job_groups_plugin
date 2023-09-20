@@ -1,7 +1,7 @@
 # Changelog
 
 ### 0.9.0
-- Add a `CompleteStaleJobGroupsJob`, which can be run periodically to close "stuck" job groups
+- Add a `CompleteStuckJobGroupsJob`, which can be run periodically to close "stuck" job groups
 
 ### 0.8.0
 - Drop support for ruby < 2.7

@@ -115,7 +115,7 @@ As a remedy for the above scenario, a job is provided which cleans up any job gr
 run this job periodically (for example in a cron job), especially in high-thoughput applications.
 
 ```ruby
-Delayed::JobGroups::CompleteStaleJobGroupsJob.enqueue
+Delayed::JobGroups::CompleteStuckJobGroupsJob.enqueue
 ```
 
 ## Supported Platforms

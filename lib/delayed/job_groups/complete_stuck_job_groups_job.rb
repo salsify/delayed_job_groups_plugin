@@ -2,7 +2,7 @@
 
 module Delayed
   module JobGroups
-    class CompleteStaleJobGroupsJob
+    class CompleteStuckJobGroupsJob
       if defined?(Delayed::Extensions::SystemJobWithoutSecurityContext)
         include Delayed::Extensions::SystemJobWithoutSecurityContext
       end

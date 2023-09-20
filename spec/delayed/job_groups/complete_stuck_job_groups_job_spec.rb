@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Delayed::JobGroups::CompleteStaleJobGroupsJob do
+describe Delayed::JobGroups::CompleteStuckJobGroupsJob do
   describe "#perform" do
     let(:job) { described_class.new }
 
