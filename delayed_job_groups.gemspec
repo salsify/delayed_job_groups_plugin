@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = Dir.glob('spec/**/*')
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.0'
 
   spec.add_dependency 'delayed_job', '>= 4.1'
   spec.add_dependency 'delayed_job_active_record', '>= 4.1'
@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
                               'for upgrade/installation notes.'
 
   spec.add_development_dependency 'appraisal'
-  spec.add_dependency 'activerecord', '>= 5.2', '< 7.1'
+  spec.add_dependency 'activerecord', '>= 6.1', '< 7.1'
   spec.add_development_dependency 'coveralls_reborn', '>= 0.18.0'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
   spec.add_development_dependency 'factory_bot_rails'
