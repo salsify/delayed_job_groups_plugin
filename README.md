@@ -49,7 +49,7 @@ Creating a job group and queueing some jobs:
 ```ruby
 job_group = Delayed::JobGroups::JobGroup.create!
 
-# JobGroup#enqueue has the same signature as Delayed::Job.enqueue 
+# JobGroup#enqueue has the same signature as Delayed::Job.enqueue
 # i.e. it takes a job and an optional hash of options.
 job_group.enqueue(MyJob.new('some arg'), queue: 'general')
 job_group.enqueue(MyJob.new('some other arg'), queue: 'general', priority: 10)
@@ -62,7 +62,7 @@ Registering a job to run after all jobs in the job group have completed:
 
 ```ruby
 # We can optionally pass options that will be used when queueing the on completion job
-job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: MyCompletionJob.new, 
+job_group = Delayed::JobGroups::JobGroup.create!(on_completion_job: MyCompletionJob.new,
                                                  on_completion_job_options: { queue: 'general' })
 ```
 
@@ -70,7 +70,7 @@ Registering a job to run if the job group is canceled or fails:
 
 ```ruby
 # We can optionally pass options that will be used when queueing the on cancellation job
-job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: MyCancellationJob.new, 
+job_group = Delayed::JobGroups::JobGroup.create!(on_cancellation_job: MyCancellationJob.new,
                                                  on_cancellation_job_options: { queue: 'general' })
 ```
 
@@ -81,9 +81,9 @@ Block and unblock jobs in a job group:
 job_group = Delayed::JobGroups::JobGroup.create!(blocked: true)
 job_group.enqueue(MyJob.new('some arg'), queue: 'general')
 job_group.mark_queueing_complete
- 
+
 # Do more stuff...
- 
+
 # Unblock the JobGroup so its jobs can run
 job_group.unblock
 ```
@@ -92,17 +92,30 @@ Cancel a job group:
 
 ```ruby
 job_group = Delayed::JobGroups::JobGroup.create!
- 
+
 # Do more stuff...
- 
+
 job_group.cancel
 ```
 
 Configuration to allow failed jobs not to cancel the group
 ```ruby
 # We can optionally pass options that will allow jobs to fail without cancelling the group.
-# This also allows the on_completion job to fire once all jobs have either succeeded or failed. 
+# This also allows the on_completion job to fire once all jobs have either succeeded or failed.
 job_group = Delayed::JobGroups::JobGroup.create!(failure_cancels_group: false)
+```
+
+### Maintenance
+
+It's possible to end up in a state where all jobs in a group have been completed, but the completion job has not run.
+This is due a race condition where the final job in a group is completed, and the worker running it is terminated before
+the completion job can be enqueued.
+
+As a remedy for the above scenario, a job is provided which cleans up any job groups in this state. It is recommended to
+run this job periodically (for example in a cron job), especially in high-thoughput applications.
+
+```ruby
+Delayed::JobGroups::CompleteStaleJobGroupsJob.enqueue
 ```
 
 ## Supported Platforms

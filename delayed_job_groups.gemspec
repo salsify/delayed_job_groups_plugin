@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activerecord', '>= 5.2', '< 7.1'
   spec.add_development_dependency 'coveralls_reborn', '>= 0.18.0'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
+  spec.add_development_dependency 'factory_bot_rails'
   spec.add_development_dependency 'mime-types'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3'

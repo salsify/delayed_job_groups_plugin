@@ -22,6 +22,8 @@ module Delayed
       has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
                 dependent: :delete_all
 
+      scope :ready, -> { where(queueing_complete: true, blocked: false) }
+
       def mark_queueing_complete
         with_lock do
           raise 'JobGroup has already completed queueing' if queueing_complete?
@@ -50,6 +52,10 @@ module Delayed
       def cancel
         Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
         destroy
+      end
+
+      def check_for_completion
+        self.class.check_for_completion(id)
       end
 
       def self.check_for_completion(job_group_id)
