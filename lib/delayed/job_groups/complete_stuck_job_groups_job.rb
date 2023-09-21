@@ -3,10 +3,6 @@
 module Delayed
   module JobGroups
     class CompleteStuckJobGroupsJob
-      if defined?(Delayed::Extensions::SystemJobWithoutSecurityContext)
-        include Delayed::Extensions::SystemJobWithoutSecurityContext
-      end
-
       class << self
         def enqueue(**kwargs)
           Delayed::Job.enqueue(new, **kwargs)
