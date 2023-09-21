@@ -64,10 +64,8 @@ jobs:
 workflows:
   build:
     jobs:
-      - lint:
-          context: Salsify
+      - lint
       - test:
-          context: Salsify
           matrix:
             parameters:
               gemfile:
