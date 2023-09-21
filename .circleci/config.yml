@@ -1,14 +1,8 @@
-aws-auth: &aws-auth
-  aws_auth:
-    aws_access_key_id: $ECR_AWS_ACCESS_KEY_ID
-    aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
-
 version: 2.1
 jobs:
   lint:
     docker:
-      - image: $SALSIFY_ECR_REPO/ruby_ci:3.0.6
-        <<: *aws-auth
+      - image: cimg/ruby:3.0.6
     working_directory: ~/delayed_job_groups
     steps:
       - checkout
@@ -38,8 +32,7 @@ jobs:
       ruby_version:
         type: string
     docker:
-      - image: $SALSIFY_ECR_REPO/ruby_ci:<< parameters.ruby_version >>
-        <<: *aws-auth
+      - image: cimg/ruby:<< parameters.ruby_version >>
     environment:
       CIRCLE_TEST_REPORTS: "test-results"
       BUNDLE_GEMFILE: << parameters.gemfile >>
