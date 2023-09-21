@@ -27,13 +27,24 @@ describe Delayed::JobGroups::JobGroup do
     Timecop.return
   end
 
-  describe "ready scope" do
-    let!(:blocked) { create(:job_group, blocked: true) }
-    let!(:not_queueing_complete) { create(:job_group, queueing_complete: false) }
-    let!(:ready) { create(:job_group, queueing_complete: true, blocked: false) }
+  describe "scopes" do
+    describe "ready" do
+      let!(:blocked) { create(:job_group, blocked: true) }
+      let!(:not_queueing_complete) { create(:job_group, queueing_complete: false) }
+      let!(:ready) { create(:job_group, queueing_complete: true, blocked: false) }
 
-    it "returns the expected job groups" do
-      expect(described_class.ready).to match_array(ready)
+      it "returns the expected job groups" do
+        expect(described_class.ready).to match_array(ready)
+      end
+    end
+
+    describe "with_no_open_jobs" do
+      let!(:job_group_with_jobs) { create(:delayed_job).job_group }
+      let!(:job_group_without_jobs) { subject }
+
+      it "returns groups with no jobs" do
+        expect(described_class.with_no_open_jobs).to match_array(job_group_without_jobs)
+      end
     end
   end
 

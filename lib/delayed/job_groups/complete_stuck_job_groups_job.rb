@@ -10,7 +10,9 @@ module Delayed
       end
 
       def perform
-        Delayed::JobGroups::JobGroup.ready.find_each(&:check_for_completion)
+        Delayed::JobGroups::JobGroup.ready.with_no_open_jobs.find_each do |job_group|
+          job_group.check_for_completion(skip_pending_jobs_check: true)
+        end
       end
     end
   end

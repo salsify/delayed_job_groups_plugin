@@ -6,7 +6,12 @@ describe Delayed::JobGroups::CompleteStuckJobGroupsJob do
 
     let!(:blocked) { create(:job_group, blocked: true) }
     let!(:not_queueing_complete) { create(:job_group, queueing_complete: false) }
-    let!(:ready) { create(:job_group, queueing_complete: true, blocked: false) }
+    let!(:ready_without_jobs) { create(:job_group, queueing_complete: true, blocked: false) }
+    let!(:ready_with_jobs) do
+      create(:job_group, queueing_complete: true, blocked: false).tap do |job_group|
+        create(:delayed_job, job_group: job_group)
+      end
+    end
 
     before do
       allow(Delayed::JobGroups::JobGroup).to receive(:check_for_completion)
@@ -17,7 +22,7 @@ describe Delayed::JobGroups::CompleteStuckJobGroupsJob do
 
       expect(Delayed::JobGroups::JobGroup).to have_received(:check_for_completion)
                                                 .once
-                                                .with(ready.id)
+                                                .with(ready_without_jobs.id, skip_pending_jobs_check: true)
     end
   end
 
