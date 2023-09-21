@@ -109,7 +109,7 @@ describe Delayed::JobGroups::JobGroup do
 
     shared_context "complete job and check job group complete" do
       before do
-        job.destroy
+        job.destroy!
         job_group.check_for_completion
       end
     end
@@ -175,7 +175,7 @@ describe Delayed::JobGroups::JobGroup do
 
     shared_context "complete job and check job group complete" do
       before do
-        job.destroy
+        job.destroy!
         Delayed::JobGroups::JobGroup.check_for_completion(job_group.id)
       end
     end
