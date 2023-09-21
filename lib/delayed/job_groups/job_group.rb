@@ -24,6 +24,9 @@ module Delayed
 
       scope :ready, -> { where(queueing_complete: true, blocked: false) }
       scope :with_no_open_jobs, -> { left_joins(:active_jobs).group(:id).having('count(delayed_jobs.id) == 0') }
+      scope :with_no_open_jobs_exists, -> do
+        where("not exists (#{Delayed::Job.where('delayed_jobs.job_group_id = delayed_job_groups.id').to_sql})")
+      end
 
       def mark_queueing_complete
         with_lock do

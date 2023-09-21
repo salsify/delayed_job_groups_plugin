@@ -46,6 +46,47 @@ describe Delayed::JobGroups::JobGroup do
         expect(described_class.with_no_open_jobs).to match_array(job_group_without_jobs)
       end
     end
+
+    describe "with_no_open_jobs_exists" do
+      let!(:job_group_with_jobs) { create(:delayed_job).job_group }
+      let!(:job_group_without_jobs) { subject }
+
+      it "returns groups with no jobs" do
+        expect(described_class.with_no_open_jobs_exists).to match_array(job_group_without_jobs)
+      end
+    end
+
+    describe "perf" do
+      let(:iterations) { 1000 }
+      let(:num_job_groups) { 1_000 }
+
+      before do
+        ActiveSupport::Deprecation.silenced = true
+        require 'benchmark'
+        @zeros = 0
+
+        num_job_groups.times do |i|
+          puts "Creating job group # #{i}" if i % 100 == 0
+          job_group = create(:job_group)
+          n = Integer(rand.round(1) * 100)
+          if n.zero?
+            @zeros += 1
+          else
+            create_list(:delayed_job, n, job_group: job_group)
+          end
+        end
+      end
+
+      it "benchmark" do
+        Benchmark.bm do |bench|
+          bench.report(:having) { iterations.times { described_class.with_no_open_jobs.to_a } }
+          bench.report(:exists) { iterations.times { described_class.with_no_open_jobs_exists.to_a } }
+        end
+
+        expect(described_class.with_no_open_jobs.to_a.size).to eq @zeros
+        expect(described_class.with_no_open_jobs_exists.to_a.size).to eq @zeros
+      end
+    end
   end
 
   shared_examples "the job group was completed" do
