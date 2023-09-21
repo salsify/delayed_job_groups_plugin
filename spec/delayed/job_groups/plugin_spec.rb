@@ -13,7 +13,7 @@ describe Delayed::JobGroups::Plugin do
     Delayed::Worker.max_attempts = @old_max_attempts
   end
 
-  let!(:job_group) { Delayed::JobGroups::JobGroup.create!(on_completion_job: TestJobs::CompletionJob.new) }
+  let!(:job_group) { create(:job_group, on_completion_job: TestJobs::CompletionJob.new) }
 
   it "runs the completion job after completing other jobs" do
     job_group.enqueue(TestJobs::NoOpJob.new)
@@ -215,8 +215,11 @@ describe Delayed::JobGroups::Plugin do
 
   context "when a cancellation job is provided" do
     let!(:job_group) do
-      Delayed::JobGroups::JobGroup.create!(on_completion_job: TestJobs::CompletionJob.new,
-                                           on_cancellation_job: TestJobs::CancellationJob.new)
+      create(
+        :job_group,
+        on_completion_job: TestJobs::CompletionJob.new,
+        on_cancellation_job: TestJobs::CancellationJob.new
+      )
     end
 
     it "runs the cancellation job after a job error causes cancellation" do
@@ -262,7 +265,7 @@ describe Delayed::JobGroups::Plugin do
   end
 
   context "when a no completion job is provided" do
-    let!(:job_group) {  Delayed::JobGroups::JobGroup.create! }
+    let!(:job_group) { create(:job_group) }
 
     it "doesn't queue a non-existent completion job" do
       job_group.enqueue(TestJobs::NoOpJob.new)

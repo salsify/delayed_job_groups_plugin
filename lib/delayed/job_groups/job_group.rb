@@ -22,6 +22,11 @@ module Delayed
       has_many :queued_jobs, -> { where(failed_at: nil, locked_by: nil) }, class_name: '::Delayed::Job',
                 dependent: :delete_all
 
+      scope :ready, -> { where(queueing_complete: true, blocked: false) }
+      scope :with_no_open_jobs, -> do
+        where("NOT EXISTS (#{Delayed::Job.where('delayed_jobs.job_group_id = delayed_job_groups.id').to_sql})")
+      end
+
       def mark_queueing_complete
         with_lock do
           raise 'JobGroup has already completed queueing' if queueing_complete?
@@ -52,10 +57,14 @@ module Delayed
         destroy
       end
 
-      def self.check_for_completion(job_group_id)
+      def check_for_completion(skip_pending_jobs_check: false)
+        self.class.check_for_completion(id, skip_pending_jobs_check: skip_pending_jobs_check)
+      end
+
+      def self.check_for_completion(job_group_id, skip_pending_jobs_check: false)
         # Optimization to avoid loading and locking the JobGroup when the group
         # still has pending jobs
-        return if has_pending_jobs?(job_group_id)
+        return if !skip_pending_jobs_check && has_pending_jobs?(job_group_id)
 
         transaction do
           # The first completed job to notice the job group's queue count has dropped to

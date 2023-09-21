@@ -10,9 +10,12 @@ describe Delayed::JobGroups::JobGroup do
   let(:current_time) { Time.utc(2013) }
 
   subject(:job_group) do
-    Delayed::JobGroups::JobGroup.create!(on_completion_job: on_completion_job,
-                                         on_completion_job_options: on_completion_job_options,
-                                         blocked: blocked)
+    create(
+      :job_group,
+      on_completion_job: on_completion_job,
+      on_completion_job_options: on_completion_job_options,
+      blocked: blocked
+    )
   end
 
   before do
@@ -22,6 +25,27 @@ describe Delayed::JobGroups::JobGroup do
 
   after do
     Timecop.return
+  end
+
+  describe "scopes" do
+    describe "ready" do
+      let!(:blocked) { create(:job_group, blocked: true) }
+      let!(:not_queueing_complete) { create(:job_group, queueing_complete: false) }
+      let!(:ready) { create(:job_group, queueing_complete: true, blocked: false) }
+
+      it "returns the expected job groups" do
+        expect(described_class.ready).to match_array(ready)
+      end
+    end
+
+    describe "with_no_open_jobs" do
+      let!(:job_group_with_jobs) { create(:delayed_job).job_group }
+      let!(:job_group_without_jobs) { subject }
+
+      it "returns groups with no jobs" do
+        expect(described_class.with_no_open_jobs).to match_array(job_group_without_jobs)
+      end
+    end
   end
 
   shared_examples "the job group was completed" do
@@ -76,7 +100,7 @@ describe Delayed::JobGroups::JobGroup do
     end
   end
 
-  describe ".check_for_completion" do
+  describe "instance check_for_completion" do
     let!(:job) { Delayed::Job.create!(job_group_id: job_group.id) }
 
     before do
@@ -85,7 +109,73 @@ describe Delayed::JobGroups::JobGroup do
 
     shared_context "complete job and check job group complete" do
       before do
-        job.destroy
+        job.destroy!
+        job_group.check_for_completion
+      end
+    end
+
+    context "when no jobs exist" do
+      include_context "complete job and check job group complete"
+
+      it_behaves_like "the job group was completed"
+    end
+
+    context "when active jobs exist" do
+      before do
+        Delayed::JobGroups::JobGroup.check_for_completion(job_group.id)
+      end
+
+      it_behaves_like "the job group was not completed"
+    end
+
+    context "when on failed jobs exist" do
+      before do
+        job.update!(failed_at: Time.now)
+        Delayed::JobGroups::JobGroup.check_for_completion(job_group.id)
+      end
+
+      it_behaves_like "the job group was completed"
+    end
+
+    context "when there are no on_completion_job_options" do
+      let(:on_completion_job_options) { nil }
+
+      include_context "complete job and check job group complete"
+
+      it "queues the completion job with empty options" do
+        expect(Delayed::Job).to have_received(:enqueue).with(on_completion_job, {})
+      end
+
+      it "destroys the job group" do
+        expect(job_group).to have_been_destroyed
+      end
+    end
+
+    context "when there is no on_completion_job" do
+      let(:on_completion_job) { nil }
+
+      include_context "complete job and check job group complete"
+
+      it "doesn't queues the non-existent completion job" do
+        expect(Delayed::Job).not_to have_received(:enqueue)
+      end
+
+      it "destroys the job group" do
+        expect(job_group).to have_been_destroyed
+      end
+    end
+  end
+
+  describe "class check_for_completion" do
+    let!(:job) { Delayed::Job.create!(job_group_id: job_group.id) }
+
+    before do
+      job_group.mark_queueing_complete
+    end
+
+    shared_context "complete job and check job group complete" do
+      before do
+        job.destroy!
         Delayed::JobGroups::JobGroup.check_for_completion(job_group.id)
       end
     end

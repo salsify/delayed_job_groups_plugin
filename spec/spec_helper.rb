@@ -14,6 +14,7 @@ end
 require 'rspec/its'
 require 'database_cleaner'
 require 'delayed_job_groups_plugin'
+require 'factory_bot'
 require 'yaml'
 require 'timecop'
 
@@ -40,6 +41,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    FactoryBot.find_definitions
   end
 
   config.before do
@@ -53,4 +55,6 @@ RSpec.configure do |config|
   config.after do
     DatabaseCleaner.clean
   end
+
+  config.include FactoryBot::Syntax::Methods
 end
