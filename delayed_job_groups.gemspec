@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
                               'for upgrade/installation notes.'
 
   spec.add_development_dependency 'appraisal'
-  spec.add_dependency 'activerecord', '>= 6.1', '< 7.1'
+  spec.add_dependency 'activerecord', '>= 6.1', '< 7.2'
   spec.add_development_dependency 'coveralls_reborn', '>= 0.18.0'
   spec.add_development_dependency 'database_cleaner', '>= 1.2'
   spec.add_development_dependency 'factory_bot_rails'
@@ -43,7 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3'
   spec.add_development_dependency 'rspec-its'
   spec.add_development_dependency 'rspec_junit_formatter'
-  spec.add_development_dependency 'salsify_rubocop', '~> 1.0.1'
+  spec.add_development_dependency 'salsify_rubocop', '~> 1.43.0'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'timecop'
