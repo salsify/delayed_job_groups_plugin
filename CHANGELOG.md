@@ -1,7 +1,9 @@
 # Changelog
 
-## 0.10.0
+## 0.10.1
+- Fix Rails 7.1 deprecation warnings
 
+## 0.10.0
 - Add support for Rails 7.1
 
 ## 0.9.0
