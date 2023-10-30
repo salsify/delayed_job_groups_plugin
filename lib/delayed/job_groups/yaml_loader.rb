@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# This can be removed when we only support Rails 7.1+ because Rails 7.1 add a serialization
+# option for unsafe YAML loads
 module Delayed
   module JobGroups
     module YamlLoader

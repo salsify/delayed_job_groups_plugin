@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'yaml_loader'
+require_relative 'compatibility'
 
 module Delayed
   module JobGroups
@@ -8,10 +9,18 @@ module Delayed
 
       self.table_name = "#{ActiveRecord::Base.table_name_prefix}delayed_job_groups"
 
-      serialize :on_completion_job, Delayed::JobGroups::YamlLoader
-      serialize :on_completion_job_options, Hash
-      serialize :on_cancellation_job, Delayed::JobGroups::YamlLoader
-      serialize :on_cancellation_job_options, Hash
+      if Compatibility.rails_7_1_or_greater?
+        serialize :on_completion_job, coder: YAML, yaml: { unsafe_load: true }
+        serialize :on_completion_job_options, coder: YAML, type: Hash
+        serialize :on_cancellation_job, coder: YAML, yaml: { unsafe_load: true }
+        serialize :on_cancellation_job_options, coder: YAML, type: Hash
+      else
+        serialize :on_completion_job, Delayed::JobGroups::YamlLoader
+        serialize :on_completion_job_options, Hash
+        serialize :on_cancellation_job, Delayed::JobGroups::YamlLoader
+        serialize :on_cancellation_job_options, Hash
+      end
+
 
       validates :queueing_complete, :blocked, :failure_cancels_group, inclusion: [true, false]
 
