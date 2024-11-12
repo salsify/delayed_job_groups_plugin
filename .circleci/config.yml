@@ -4,13 +4,13 @@ jobs:
     docker:
       - image: cimg/ruby:3.0.7
     environment:
-      BUNDLE_GEMFILE: gemfiles/rails_6.1.gemfile
+      BUNDLE_GEMFILE: gemfiles/rails_7.0.gemfile
     working_directory: ~/delayed_job_groups
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-ruby-3.0.7-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "gemfiles/rails_6.1.gemfile" }}
+            - v1-gems-ruby-3.0.7-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "gemfiles/rails_7.0.gemfile
             - v1-gems-ruby-3.0.7-
       - run:
           name: Install Gems
@@ -20,7 +20,7 @@ jobs:
               bundle clean
             fi
       - save_cache:
-          key: v1-gems-ruby-3.0.7-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "gemfiles/rails_6.1.gemfile" }}
+          key: v1-gems-ruby-3.0.7-{{ checksum "delayed_job_groups.gemspec" }}-{{ checksum "gemfiles/rails_7.0.gemfile
           paths:
             - "vendor/bundle"
             - "gemfiles/vendor/bundle"
