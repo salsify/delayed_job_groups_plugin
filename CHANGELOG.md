@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.0
+- Add support for Rails 8.0.
+- Drop support for Rails 6.1
+
 ## 0.11.0
 - Add support for Rails 7.2.
 - 

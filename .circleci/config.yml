@@ -71,15 +71,15 @@ workflows:
           matrix:
             parameters:
               gemfile:
-                - gemfiles/rails_6.1.gemfile
                 - gemfiles/rails_7.0.gemfile
                 - gemfiles/rails_7.1.gemfile
                 - gemfiles/rails_7.2.gemfile
+                - gemfiles/rails_8.0.gemfile
               ruby_version:
-                - 3.0.7
-                - 3.1.6
-                - 3.2.5
+                - 3.1.5
+                - 3.2.4
                 - 3.3.4
             exclude:
-              - gemfile: gemfiles/rails_7.2.gemfile
-                ruby_version: 3.0.7
+              - gemfile: gemfiles/rails_8.0.gemfile
+                ruby_version: 3.1.5
+
