@@ -17,7 +17,7 @@ module Delayed
           end
         end
 
-        lifecycle.before(:failure) do |_worker, job|
+        lifecycle.after(:failure) do |_worker, job|
           # If a job in the job group fails, then cancel the whole job group.
           # Need to check that the job group is present since another
           # job may have concurrently cancelled it.

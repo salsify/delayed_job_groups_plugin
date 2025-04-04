@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.13.0
+- A failing job in a job group will now trigger the `on_cancellation_job` in after failure hook rather than before.
+
 ## 0.12.0
 - Add support for Rails 8.0.
 - Drop support for Rails 6.1
