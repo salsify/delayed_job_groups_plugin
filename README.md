@@ -35,12 +35,22 @@ Run the required database migrations:
     $ rails generate delayed_job_groups_plugin:install
     $ rake db:migrate
 
+## Upgrading from 0.14.0
+
+This library is now incompatible with Delayed::Job's default setting for `destroy_failed_jobs`.
+In order to use Delayed Job Groups, you must set it to false while configuring Delayed::Job:
+
+```ruby
+Delayed::Worker.destroy_failed_jobs = false
+```
+
 ## Upgrading from 0.1.2
 run the following generator to create a migration for the new configuration column.
 
     $ rails generate migration add_failure_cancels_group_to_delayed_job_groups failure_cancels_group:boolean
     # add `default: true, null: false` to the generated migration for the failure_cancels_group column
     $ rake db:migrate
+
 
 ## Usage
 
