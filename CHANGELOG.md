@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.0
+- Moves `on_cancellation` logic from the before delayed job lifecycle hook to the after hook.
+- Gem will now fail to load if `Delayed::Worker.destroy_failed_jobs` is set to true.
+- Wrapped the job group cancel hook in a lock to prevent concurrently failing jobs from enqueueing
+  multiple on cancellation jobs.
+
 ## 0.12.0
 - Add support for Rails 8.0.
 - Drop support for Rails 6.1
