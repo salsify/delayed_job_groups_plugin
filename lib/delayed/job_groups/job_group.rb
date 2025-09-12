@@ -63,6 +63,8 @@ module Delayed
 
       def cancel
         with_lock do
+          return if destroyed?
+
           Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
           destroy
         end
