@@ -17,7 +17,13 @@ module Delayed
           end
         end
 
-        lifecycle.before(:failure) do |_worker, job|
+        # In order to allow individual jobs in the JobGroup to perform cleanup activities upon
+        # job failure, a JobGroups on cancellation job must be enqueued in the after failure
+        # delayed job lifecycle hook. If both were to be performed in the same hook, the job's
+        # failure hook and the on cancellation job may run at the same time since hook execution
+        # order is never guaranteed. This is particular important if the on cancellation job
+        # depends on state set in the failure hook of an individual job.
+        lifecycle.after(:failure) do |_worker, job|
           # If a job in the job group fails, then cancel the whole job group.
           # Need to check that the job group is present since another
           # job may have concurrently cancelled it.
