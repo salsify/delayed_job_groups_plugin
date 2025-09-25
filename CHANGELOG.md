@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.14.0
+- Reverts changes made in version 0.13.
+
 ## 0.13.0
 - Moves `on_cancellation` logic from the before delayed job lifecycle hook to the after hook.
 - Gem will now fail to load if `Delayed::Worker.destroy_failed_jobs` is set to true.
