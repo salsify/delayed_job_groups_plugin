@@ -4,7 +4,6 @@ require 'active_support'
 require 'active_record'
 require 'delayed_job'
 require 'delayed_job_active_record'
-require 'delayed/job_groups/errors'
 require 'delayed/job_groups/compatibility'
 require 'delayed/job_groups/complete_stuck_job_groups_job'
 require 'delayed/job_groups/job_extensions'
@@ -19,7 +18,6 @@ if defined?(Rails::Railtie)
 else
   # Do the same as in the railtie
   Delayed::Backend::ActiveRecord::Job.include(Delayed::JobGroups::JobExtensions)
-  raise Delayed::JobGroups::IncompatibleWithDelayedJobError if Delayed::Worker.destroy_failed_jobs
 end
 
 Delayed::Worker.plugins << Delayed::JobGroups::Plugin

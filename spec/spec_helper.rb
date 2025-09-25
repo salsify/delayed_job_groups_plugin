@@ -13,11 +13,6 @@ end
 
 require 'rspec/its'
 require 'database_cleaner'
-require 'delayed_job'
-
-Delayed::Worker.read_ahead = 1
-Delayed::Worker.destroy_failed_jobs = false
-
 require 'delayed_job_groups_plugin'
 require 'factory_bot'
 require 'yaml'
@@ -27,6 +22,9 @@ spec_dir = File.dirname(__FILE__)
 Dir["#{spec_dir}/support/**/*.rb"].sort.each { |f| require f }
 
 FileUtils.makedirs('log')
+
+Delayed::Worker.read_ahead = 1
+Delayed::Worker.destroy_failed_jobs = false
 
 Delayed::Worker.logger = Logger.new('log/test.log')
 Delayed::Worker.logger.level = Logger::DEBUG

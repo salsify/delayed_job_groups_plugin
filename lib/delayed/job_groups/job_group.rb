@@ -62,18 +62,8 @@ module Delayed
       end
 
       def cancel
-        with_lock do
-          return if destroyed?
-
-          Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
-          destroy
-        end
-      rescue ActiveRecord::RecordNotFound
-        # The first failing job to attempt cancelling the job group will enqueue the
-        # on cancellation job and destroy the group. Any other concurrently failing job
-        # in the same group can therefore silently return if the job group has already
-        # been destroyed.
-        nil
+        Delayed::Job.enqueue(on_cancellation_job, on_cancellation_job_options || {}) if on_cancellation_job
+        destroy
       end
 
       def check_for_completion(skip_pending_jobs_check: false)
