@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0
+### Breaking Changes
+- This library will fail to load if `Delayed::Worker.destroy_failed_jobs` is set to true.
+  Delayed::Job sets this option to true by default, you will need to configure it to false
+  in order to include this library.
+### Changes
+- Moves `on_cancellation` logic from the before delayed job lifecycle hook to the after hook.
+- Wrapped the job group cancel hook in a lock to prevent concurrently failing jobs from enqueueing
+  multiple on cancellation jobs.
+
 ## 0.14.0
 - Reverts changes made in version 0.13.
 

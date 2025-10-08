@@ -299,11 +299,28 @@ describe Delayed::JobGroups::JobGroup do
   end
 
   describe "#cancel" do
+    subject(:job_group) do
+      create(
+        :job_group,
+        on_completion_job: on_completion_job,
+        on_completion_job_options: on_completion_job_options,
+        on_cancellation_job: on_cancellation_job,
+        on_cancellation_job_options: on_cancellation_job_options,
+        blocked: blocked
+      )
+    end
+
     let!(:queued_job) { Delayed::Job.create!(job_group_id: job_group.id) }
     let!(:running_job)  { Delayed::Job.create!(job_group_id: job_group.id, locked_at: Time.now, locked_by: 'test') }
+    let(:before_hook) {}
+    let(:on_cancellation_job) { 'dummy job' }
+    let(:on_cancellation_job_options) do
+      { foo: 'bar' }
+    end
+    let(:cancel) { true }
 
     before do
-      job_group.cancel
+      job_group.cancel if cancel
     end
 
     it "destroys the job group" do
@@ -316,6 +333,21 @@ describe Delayed::JobGroups::JobGroup do
 
     it "does not destroy running jobs" do
       expect(running_job).not_to have_been_destroyed
+    end
+
+    context "when already cancelled" do
+      let(:cancel) { false }
+
+      it "skips cancel block if already cancelled" do
+        other = Delayed::JobGroups::JobGroup.find(job_group.id)
+        job_group.cancel
+
+        other.cancel
+        other.cancel
+
+        expect(Delayed::Job)
+          .to have_received(:enqueue).with(on_cancellation_job, on_cancellation_job_options).once
+      end
     end
   end
 
