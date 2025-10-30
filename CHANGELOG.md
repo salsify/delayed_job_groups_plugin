@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0
+## 2.0.0
 - Add support for Rails 8.1. 
 - Add support for ruby 3.4. 
 - Drop support for ruby 3.1. 

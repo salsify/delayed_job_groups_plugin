@@ -131,8 +131,8 @@ Delayed::JobGroups::CompleteStuckJobGroupsJob.enqueue
 ## Supported Platforms
 
 * Only the Delayed Job Active Record backend is supported.
-* Tested with Rails 4.2 through 5.2.
-* Tested with MRI 2.3 through 2.5.
+* Tested with Rails 7.2 through 8.1.
+* Tested with MRI 3.2 through 3.4.
 
 ## Contributing
 
